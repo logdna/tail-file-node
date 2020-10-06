@@ -1,0 +1,135 @@
+{
+  "name": "@logdna/tail-file",
+  "version": "0.0.0",
+  "description": "A node.js version of unix's `tail -f` command",
+  "main": "index.js",
+  "scripts": {
+    "test": "tap",
+    "lint": "eslint ./",
+    "pretest": "npm run lint"
+  },
+  "keywords": [
+    "tail -f",
+    "tail",
+    "tail file",
+    "logging",
+    "streams",
+    "tail stream"
+  ],
+  "bugs": {
+    "url": "https://github.com/logdna/tail-file-node/issues"
+  },
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "url": "https://github.com/logdna/tail-file-node"
+  },
+  "homepage": "https://github.com/logdna/tail-file-node",
+  "author": "LogDNA, Inc.",
+  "license": "SEE LICENSE IN LICENSE",
+  "eslintConfig": {
+    "root": true,
+    "ignorePatterns": [
+      "node_modules/",
+      "coverage/"
+    ],
+    "extends": [
+      "logdna"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2019
+    }
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
+    "eslint": "^7.10.0",
+    "eslint-config-logdna": "^2.0.0",
+    "husky": "^4.3.0",
+    "tap": "^14.10.7"
+  },
+  "tap": {
+    "100": true,
+    "esm": false,
+    "ts": false,
+    "jsx": false,
+    "check-coverage": true,
+    "jobs": 1,
+    "coverage-report": [
+      "text",
+      "text-summary",
+      "json",
+      "html"
+    ],
+    "reporter": "tap",
+    "nyc-arg": [
+      "--exclude=test/",
+      "--exclude=tools",
+      "--all"
+    ],
+    "files": [
+      "test/**/*.js"
+    ],
+    "output-file": ".tap-output"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "prepare-commit-msg": "tools/git-commit-template.js"
+    }
+  },
+  "commitlint": {
+    "rules": {
+      "body-leading-blank": [
+        2,
+        "always"
+      ],
+      "body-max-line-length": [
+        2,
+        "always",
+        72
+      ],
+      "body-min-length": [
+        2,
+        "always",
+        20
+      ],
+      "subject-max-length": [
+        2,
+        "always",
+        72
+      ],
+      "scope-empty": [
+        2,
+        "always"
+      ],
+      "subject-full-stop": [
+        2,
+        "never",
+        "."
+      ],
+      "type-enum": [
+        2,
+        "always",
+        [
+          "feat",
+          "deps",
+          "fix",
+          "docs",
+          "package",
+          "style",
+          "refactor",
+          "test",
+          "revert",
+          "WIP"
+        ]
+      ],
+      "type-empty": [
+        2,
+        "never"
+      ]
+    }
+  }
+}

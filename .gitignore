@@ -1,0 +1,6 @@
+.nyc_output
+coverage
+node_modules
+.tap-output
+.npm
+test/memory-usage/log-to-tail.log

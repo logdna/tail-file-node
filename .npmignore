@@ -1,0 +1,13 @@
+*.log
+npm-debug.log*
+coverage
+.nyc_output
+*.tgz
+.env
+*.swp
+*.vim
+.npm
+.tap-output
+Jenkinsfile
+tools
+test/memory-usage
