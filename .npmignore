@@ -10,4 +10,4 @@ coverage
 .tap-output
 Jenkinsfile
 tools
-test/memory-usage
+test
