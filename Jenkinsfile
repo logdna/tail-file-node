@@ -135,7 +135,7 @@ pipeline {
       steps {
         sh 'mkdir -p .npm'
 
-        sh "git checkout -b ${GIT_BRANCH} origin/${GIT_BRANCH}"
+        sh "git checkout -B ${GIT_BRANCH} origin/${GIT_BRANCH}"
 
         versioner(
           token: "${GITHUB_PACKAGES_TOKEN}"
