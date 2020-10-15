@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/github/logdna/tail-file-node/badge.svg?branch=master)](https://coveralls.io/github/logdna/tail-file-node?branch=master)
+
 # TailFile
 
 At LogDNA, consuming log files and making them searchable is what we do!
@@ -220,7 +222,7 @@ stream, so it may also emit these events.  The most common ones are `close`
   * Any additional key-value options get passed to the [`Readable`][] superclass
     constructor of `TailFile`
 * Throws: [`<TypeError>`][] if parameter validation fails
-* Returns: `TailFile`, which is a [`Readable`][Readable] stream
+* Returns: `TailFile`, which is a [`Readable`][] stream
 
 Instantiating `TailFile` will return a readable stream, but nothing will happen
 until [`start()`](#start) is called.  After that, follow node's standard procedure to
