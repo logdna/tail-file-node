@@ -1,7 +1,7 @@
 library 'magic-butler-catalogue'
 
-def projectName = "tail-file-node"
-def repo = "logdna/${projectName}"
+def PROJECT_NAME = "tail-file-node"
+def repo = "logdna/${PROJECT_NAME}"
 
 pipeline {
   agent none
@@ -91,6 +91,7 @@ pipeline {
       agent {
         docker {
           image "us.gcr.io/logdna-k8s/node:12-ci"
+          customWorkspace "${PROJECT_NAME}-${BUILD_NUMBER}"
         }
       }
 
@@ -121,6 +122,7 @@ pipeline {
       agent {
         docker {
           image "us.gcr.io/logdna-k8s/node:12-ci"
+          customWorkspace "${PROJECT_NAME}-${BUILD_NUMBER}"
         }
       }
 
