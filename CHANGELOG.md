@@ -1,3 +1,7 @@
+# 2020-10-22, Version 1.0.2 (Stable)
+
+* [[e485c246f7](https://github.com/logdna/tail-file-node/commit/e485c246f7)] - feat(contrib): add initial CONTRIBUTING file (Laura Santamaria)
+
 # 2020-10-15, Version 1.0.1 (Stable)
 
 * [[b21c051b77](https://github.com/logdna/tail-file-node/commit/b21c051b77)] - fix: CI needs custom work spaces for release stages (Darin Spivey)
