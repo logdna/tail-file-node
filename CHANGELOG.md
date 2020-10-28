@@ -1,3 +1,7 @@
+# 2020-10-28, Version 1.0.3 (Stable)
+
+* [[157194e166](https://github.com/logdna/tail-file-node/commit/157194e166)] - fix: add PR validation to Jenkinsfile (Ryan Mottley) [LOG-7717](https://logdna.atlassian.net/browse/LOG-7717)
+
 # 2020-10-22, Version 1.0.2 (Stable)
 
 * [[e485c246f7](https://github.com/logdna/tail-file-node/commit/e485c246f7)] - feat(contrib): add initial CONTRIBUTING file (Laura Santamaria)
