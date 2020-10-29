@@ -219,9 +219,11 @@ stream, so it may also emit these events.  The most common ones are `close`
   * `readStreamOpts` [`<Object>`][] - Options to pass to the
     [`fs.createReadStream`][createReadStream] function. This is used for reading bytes
     that have been added to `filename` between every poll.
+  * `startPos` [`<Number>`][] - An integer representing the inital read position in
+    the file. Useful for reading from `0`. **Default:** `null` (start tailing from EOF)
   * Any additional key-value options get passed to the [`Readable`][] superclass
     constructor of `TailFile`
-* Throws: [`<TypeError>`][] if parameter validation fails
+* Throws: [`<TypeError>`][]|[`<RangeError>`][] if parameter validation fails
 * Returns: `TailFile`, which is a [`Readable`][] stream
 
 Instantiating `TailFile` will return a readable stream, but nothing will happen
@@ -303,6 +305,7 @@ stream almost immediately upon creation.
 [`<Object>`]: https://mdn.io/object
 [`<String>`]: https://mdn.io/string
 [`<TypeError>`]: https://mdn.io/TypeError
+[`<RangeError>`]: https://mdn.io/RangeError
 [`<Error>`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
 [`Readable`]: https://nodejs.org/dist/latest-v12.x/docs/api/stream.html#stream_class_stream_readable
 [`FileHandle`]: https://nodejs.org/dist/latest-v12.x/docs/api/fs.html#fs_class_filehandle

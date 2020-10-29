@@ -296,6 +296,34 @@ test('Success: Filehandle close NOOPs on error', async (t) => {
   await tail.quit()
 })
 
+test('Success: startPos can be provided to start tailing at a given place', (t) => {
+  const name = 'logfile.txt'
+  const firstLine = 'This line will be read'
+  const secondLine = 'as well as this line'
+  const testDir = t.testdir({
+    [name]: `${firstLine}\n${secondLine}\n`
+  })
+  const filename = path.join(testDir, name)
+
+  const tail = new TailFile(filename, {
+    encoding: 'utf8'
+  , startPos: 0
+  })
+
+  t.teardown(() => {
+    tail.quit().catch(fail)
+  })
+
+  tail.start()
+
+  tail.on('data', (chunk) => {
+    if (chunk.includes(firstLine) && chunk.includes(secondLine)) {
+      t.pass('The log was successfully tailed from the beginning')
+      t.end()
+    }
+  })
+})
+
 test('Error: filename provided does not exist (poll error)', (t) => {
   t.plan(3)
 
@@ -534,4 +562,34 @@ test('Invalid options checks', async (t) => {
   , code: 'EREADSTREAMOPTS'
   , meta: {got: 'string'}
   }, 'readStreamOpts throws if not an object')
+
+  t.throws(() => {
+    const tail = new TailFile(__filename, {startPos: true})
+    return tail
+  }, {
+    name: 'TypeError'
+  , message: 'startPos must be an integer >= 0'
+  , code: 'ESTARTPOS'
+  , meta: {got: 'boolean'}
+  }, 'startPos cannot be a non-number')
+
+  t.throws(() => {
+    const tail = new TailFile(__filename, {startPos: -5})
+    return tail
+  }, {
+    name: 'RangeError'
+  , message: 'startPos must be an integer >= 0'
+  , code: 'ESTARTPOS'
+  , meta: {got: -5}
+  }, 'startPos must be > 0')
+
+  t.throws(() => {
+    const tail = new TailFile(__filename, {startPos: 1.23456})
+    return tail
+  }, {
+    name: 'RangeError'
+  , message: 'startPos must be an integer >= 0'
+  , code: 'ESTARTPOS'
+  , meta: {got: 1.23456}
+  }, 'startPos must be > 0')
 })
