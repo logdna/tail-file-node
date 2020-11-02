@@ -1,3 +1,7 @@
+# 2020-11-02, Version 1.1.0 (Stable)
+
+* [[9e4061f43b](https://github.com/logdna/tail-file-node/commit/9e4061f43b)] - **(SEMVER-MINOR)** feat: startPos allows specifying the position to tail from (Darin Spivey) [LOG-7789](https://logdna.atlassian.net/browse/LOG-7789)
+
 # 2020-10-28, Version 1.0.3 (Stable)
 
 * [[157194e166](https://github.com/logdna/tail-file-node/commit/157194e166)] - fix: add PR validation to Jenkinsfile (Ryan Mottley) [LOG-7717](https://logdna.atlassian.net/browse/LOG-7717)
