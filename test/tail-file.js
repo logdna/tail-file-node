@@ -324,23 +324,14 @@ test('Success: startPos can be provided to start tailing at a given place', (t) 
   })
 })
 
-test('Error: filename provided does not exist (poll error)', (t) => {
-  t.plan(3)
-
-  const tail = new TailFile('THISFILEDOSNOTEXIST', {maxPollFailures: 1})
-    .on('error', (err) => {
-      t.type(err, Error, 'error was emitted')
-      t.match(err, {
-        name: 'Error'
-      , code: 'ENOENT'
-      , path: 'THISFILEDOSNOTEXIST'
-      , message: /no such file or directory/
-      })
-    })
-
-  t.test('Start', async (tt) => {
-    await tail.start()
-  })
+test('Error: filename provided does not exist (throws on start)', async (t) => {
+  const tail = new TailFile('THISFILEDOSNOTEXIST')
+  await t.rejects(tail.start(), {
+    name: 'Error'
+  , code: 'ENOENT'
+  , path: 'THISFILEDOSNOTEXIST'
+  , message: /no such file or directory/
+  }, 'Expected error is thrown')
 })
 
 test('Error: poll error will retry a certain number of times', (t) => {

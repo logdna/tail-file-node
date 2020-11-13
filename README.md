@@ -66,8 +66,11 @@ const tail = new TailFile('/path/to/your/logfile.txt', {encoding: 'utf8'})
   .on('data', (chunk) => {
     console.log(`Recieved a utf8 character chunk: ${chunk}`)
   })
-  .on('error', (err) => {
+  .on('tail_error', (err) => {
     console.error('TailFile had an error!', err)
+  })
+  .on('error', (err) => {
+    console.error('A TailFile stream error was likely encountered', err)
   })
   .start()
   .catch((err) => {
@@ -86,12 +89,14 @@ const TailFile = require('@logdna/tail-file')
 const LineSplitter = require('your-line-splitter') // There are many of these in the wild
 
 const tail = new TailFile('/path/to/your/logfile.txt')
-  .on('error', (err) => {
+  .on('tail_error', (err) => {
     console.error('TailFile had an error!', err)
+    throw err
   })
   .start()
   .catch((err) => {
     console.error('Cannot start.  Does the file exist?', err)
+    throw err
   })
 
 // Data won't start flowing until piping
@@ -111,23 +116,33 @@ recommended since it will edge out `readline` slightly in performance.
 
 ```js
 const readline = require('readline')
-const tail = new TailFile('./somelog.txt')
-  .on('error', (err) => {
-    console.error('TailFile had an error!', err)
-  })
-  .start()
-  .catch((err) => {
+const TailFile = require('@logdna/tail-file')
+
+async function startTail() {
+  const tail = new TailFile('./somelog.txt')
+    .on('tail_error', (err) => {
+      console.error('TailFile had an error!', err)
+    })
+
+  try {
+    await tail.start()
+    const linesplitter = readline.createInterface({
+      input: tail
+    })
+
+    linesplitter.on('line', (line) => {
+      console.log(line)
+    })
+  } catch (err) {
     console.error('Cannot start.  Does the file exist?', err)
-})
+  }
+}
 
-const linesplitter = readline.createInterface({
-  input: tail
+startTail().catch((err) => {
+  process.nextTick(() => {
+    throw err
+  })
 })
-
-linesplitter.on('line', (line) => {
-  console.log(line)
-})
-
 ```
 
 ## Events
@@ -242,8 +257,7 @@ Useful settings such as `encoding: 'utf8'` can be used this way.
 ### `tail.start()`
 
 * Returns: [`<Promise>`][] - Resolves after the file is polled successfully
-* Emits: [`<Error>`][] and [other `Readable` events](#event-any-readable-event)
-* Rejects: If `filename` is not found, the promise is rejected
+* Rejects: If `filename` is not found
 
 Calling `start()` begins the polling of `filename` to watch for added/changed bytes.
 `start()` may be called before or after data is set up to be consumed with a
