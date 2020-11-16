@@ -1,3 +1,7 @@
+# 2020-11-16, Version 2.0.0 (Stable)
+
+* [[b05648c8c0](https://github.com/logdna/tail-file-node/commit/b05648c8c0)] - **(SEMVER-MAJOR)** refactor: `start()` should throw if filename doesn't exist (Darin Spivey) [LOG-8030](https://logdna.atlassian.net/browse/LOG-8030)
+
 # 2020-11-02, Version 1.1.0 (Stable)
 
 * [[9e4061f43b](https://github.com/logdna/tail-file-node/commit/9e4061f43b)] - **(SEMVER-MINOR)** feat: startPos allows specifying the position to tail from (Darin Spivey) [LOG-7789](https://logdna.atlassian.net/browse/LOG-7789)
