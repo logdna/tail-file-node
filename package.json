@@ -16,6 +16,9 @@
     "streams",
     "tail stream"
   ],
+  "engines": {
+    "node": ">=10.3.0"
+  },
   "bugs": {
     "url": "https://github.com/logdna/tail-file-node/issues"
   },
