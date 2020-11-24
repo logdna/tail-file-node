@@ -1,3 +1,7 @@
+# 2020-11-24, Version 2.0.1 (Stable)
+
+* [[167a6230cb](https://github.com/logdna/tail-file-node/commit/167a6230cb)] - fix: Specify 'r' flag for fs.promises.open (Darin Spivey)
+
 # 2020-11-16, Version 2.0.0 (Stable)
 
 * [[b05648c8c0](https://github.com/logdna/tail-file-node/commit/b05648c8c0)] - **(SEMVER-MAJOR)** refactor: `start()` should throw if filename doesn't exist (Darin Spivey) [LOG-8030](https://logdna.atlassian.net/browse/LOG-8030)
