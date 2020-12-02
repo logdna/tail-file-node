@@ -4,6 +4,7 @@
   "description": "A node.js version of unix's `tail -f` command",
   "main": "index.js",
   "scripts": {
+    "test:ci": "tools/test-ci.sh",
     "test": "tap",
     "lint": "eslint ./",
     "pretest": "npm run lint"
@@ -51,7 +52,8 @@
     "eslint": "^7.10.0",
     "eslint-config-logdna": "^2.0.0",
     "husky": "^4.3.0",
-    "tap": "^14.10.7"
+    "tap": "^14.10.7",
+    "tap-xunit": "^2.4.1"
   },
   "tap": {
     "100": true,
@@ -75,7 +77,7 @@
     "files": [
       "test/**/*.js"
     ],
-    "output-file": ".tap-output"
+    "output-file": "coverage/.tap-output"
   },
   "husky": {
     "hooks": {
