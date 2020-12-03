@@ -1,3 +1,7 @@
+# 2020-12-03, Version 2.0.2 (Stable)
+
+* [[192f4c1dee](https://github.com/logdna/tail-file-node/commit/192f4c1dee)] - test: Add tap-xunit and flatten results for junit output (Darin Spivey)
+
 # 2020-11-24, Version 2.0.1 (Stable)
 
 * [[167a6230cb](https://github.com/logdna/tail-file-node/commit/167a6230cb)] - fix: Specify 'r' flag for fs.promises.open (Darin Spivey)
