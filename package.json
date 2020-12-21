@@ -1,6 +1,6 @@
 {
   "name": "@logdna/tail-file",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "A node.js version of unix's `tail -f` command",
   "main": "index.js",
   "types": "index.d.ts",

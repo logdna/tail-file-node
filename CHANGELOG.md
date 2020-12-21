@@ -1,3 +1,7 @@
+# 2020-12-21, Version 2.0.3 (Stable)
+
+* [[ee4808a09e](https://github.com/logdna/tail-file-node/commit/ee4808a09e)] - feat: add TypeScript type declarations (Jakub Jirutka)
+
 # 2020-12-03, Version 2.0.2 (Stable)
 
 * [[192f4c1dee](https://github.com/logdna/tail-file-node/commit/192f4c1dee)] - test: Add tap-xunit and flatten results for junit output (Darin Spivey)
