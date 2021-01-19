@@ -66,36 +66,41 @@ interface TailFileEvents extends ReadableEvents {
   truncated: (payload: EventPayload) => void
 }
 
-export declare interface TailFileOptions extends ReadableOptions {
-  /**
-   * How often to poll filename for changes (in milliseconds).
-   * @default 1000
-   */
-  pollFileIntervalMs?: number
-  /**
-   * After a polling error (ENOENT?), how long to wait before retrying (in milliseconds).
-   * @default 200
-   */
-  pollFailureRetryMs?: number
-  /**
-   * The number of times to retry a failed poll before exiting/erroring.
-   * @default 10
-   */
-  maxPollFailures?: number
-  /**
-   * Options to pass to the `fs.createReadStream` function.
-   * This is used for reading bytes that have been added to filename between every poll.
-   */
-  readStreamOpts?: ReadStreamOpts
 
-  /**
-   * An integer representing the initial read position in the file, or `null`
-   * for start tailing from EOF.
-   * Useful for reading from 0.
-   *
-   * @default null
-   */
-  startPos?: number | null
+declare namespace TailFile {
+  // NOTE: All types in this scope are implicitly exported.
+
+  interface TailFileOptions extends ReadableOptions {
+    /**
+     * How often to poll filename for changes (in milliseconds).
+     * @default 1000
+     */
+    pollFileIntervalMs?: number
+    /**
+     * After a polling error (ENOENT?), how long to wait before retrying (in milliseconds).
+     * @default 200
+     */
+    pollFailureRetryMs?: number
+    /**
+     * The number of times to retry a failed poll before exiting/erroring.
+     * @default 10
+     */
+    maxPollFailures?: number
+    /**
+     * Options to pass to the `fs.createReadStream` function.
+     * This is used for reading bytes that have been added to filename between every poll.
+     */
+    readStreamOpts?: ReadStreamOpts
+
+    /**
+     * An integer representing the initial read position in the file, or `null`
+     * for start tailing from EOF.
+     * Useful for reading from 0.
+     *
+     * @default null
+     */
+    startPos?: number | null
+  }
 }
 
 declare class TailFile extends Readable {
@@ -109,7 +114,7 @@ declare class TailFile extends Readable {
    * @param opts Optional options.
    * @throws {TypeError | RangeError} if parameter validation fails.
    */
-  constructor(filename: string, opts?: TailFileOptions)
+  constructor(filename: string, opts?: TailFile.TailFileOptions)
 
   /**
    * Beings the polling of `filename` to watch for added/changed bytes.
@@ -155,4 +160,6 @@ declare class TailFile extends Readable {
   removeListener(event: string | symbol, listener: (...args: any[]) => void): this
 }
 
-export default TailFile
+// NOTE: Do not rewrite it into `export default` unless tail-file's `main`
+// entrypoint actually exports `default`.
+export = TailFile
