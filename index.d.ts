@@ -1,4 +1,5 @@
-import TailFile from './lib/tail-file'
+import TailFile = require('./lib/tail-file')
 
-export * from './lib/tail-file'
-export default TailFile
+// NOTE: Do not rewrite it into `export default` unless tail-file's `main`
+// entrypoint actually exports `default`.
+export = TailFile
