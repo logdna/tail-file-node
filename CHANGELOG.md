@@ -1,3 +1,7 @@
+# 2021-01-20, Version 2.0.4 (Stable)
+
+* [[ca30b46c46](https://github.com/logdna/tail-file-node/commit/ca30b46c46)] - fix: Use accurate export style in TypeScript types (Jakub Jirutka)
+
 # 2020-12-21, Version 2.0.3 (Stable)
 
 * [[ee4808a09e](https://github.com/logdna/tail-file-node/commit/ee4808a09e)] - feat: add TypeScript type declarations (Jakub Jirutka)
