@@ -1,3 +1,7 @@
+# 2021-02-05, Version 2.0.5 (Stable)
+
+* [[f22aa14479](https://github.com/logdna/tail-file-node/commit/f22aa14479)] - docs: Fix bug in README example for `pipe` (Darin Spivey)
+
 # 2021-01-20, Version 2.0.4 (Stable)
 
 * [[ca30b46c46](https://github.com/logdna/tail-file-node/commit/ca30b46c46)] - fix: Use accurate export style in TypeScript types (Jakub Jirutka)
