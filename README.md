@@ -86,9 +86,10 @@ every line.
 
 ```js
 const TailFile = require('@logdna/tail-file')
-const LineSplitter = require('your-line-splitter') // There are many of these in the wild
+const split2 = require('split2') // A common and efficient line splitter
 
 const tail = new TailFile('/path/to/your/logfile.txt')
+tail
   .on('tail_error', (err) => {
     console.error('TailFile had an error!', err)
     throw err
@@ -102,7 +103,7 @@ const tail = new TailFile('/path/to/your/logfile.txt')
 // Data won't start flowing until piping
 
 tail
-  .pipe(new LineSplitter())
+  .pipe(split2())
   .on('data', (line) => {
     console.log(line)
   })
