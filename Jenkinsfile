@@ -3,6 +3,7 @@ library 'magic-butler-catalogue'
 def PROJECT_NAME = "tail-file-node"
 def REPO = "logdna/${PROJECT_NAME}"
 def TRIGGER_PATTERN = ".*@logdnabot.*"
+def DEFAULT_BRANCH = 'main'
 
 pipeline {
   agent none
@@ -95,7 +96,7 @@ pipeline {
       when {
         beforeAgent true
         not {
-          branch 'master'
+          branch DEFAULT_BRANCH
         }
       }
 
@@ -120,7 +121,7 @@ pipeline {
           token: "${GITHUB_PACKAGES_TOKEN}"
         , dry: true
         , repo: REPO
-        , branch: "master"
+        , branch: DEFAULT_BRANCH
         )
       }
     }
@@ -128,7 +129,7 @@ pipeline {
     stage('Release') {
       when {
         beforeAgent true
-        branch 'master'
+        branch DEFAULT_BRANCH
       }
 
       agent {
@@ -156,7 +157,7 @@ pipeline {
         , dry: false
         , repo: REPO
         , NPM_PUBLISH_TOKEN: "${NPM_PUBLISH_TOKEN}"
-        , branch: "master"
+        , branch: DEFAULT_BRANCH
         )
       }
     }
