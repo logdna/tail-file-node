@@ -1,3 +1,7 @@
+# 2021-02-09, Version 2.0.6 (Stable)
+
+* [[b4934ce398](https://github.com/logdna/tail-file-node/commit/b4934ce398)] - fix: Move default branch to `main` and add contributors (Darin Spivey)
+
 # 2021-02-05, Version 2.0.5 (Stable)
 
 * [[f22aa14479](https://github.com/logdna/tail-file-node/commit/f22aa14479)] - docs: Fix bug in README example for `pipe` (Darin Spivey)
