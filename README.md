@@ -1,4 +1,4 @@
-[![Coverage Status](https://coveralls.io/repos/github/logdna/tail-file-node/badge.svg?branch=master)](https://coveralls.io/github/logdna/tail-file-node?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/logdna/tail-file-node/badge.svg?branch=main)](https://coveralls.io/github/logdna/tail-file-node?branch=main)
 
 # TailFile
 

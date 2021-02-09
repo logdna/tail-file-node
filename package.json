@@ -32,7 +32,28 @@
     "url": "https://github.com/logdna/tail-file-node"
   },
   "homepage": "https://github.com/logdna/tail-file-node",
-  "author": "LogDNA, Inc.",
+  "author": {
+    "name": "LogDNA, Inc.",
+    "email": "help@logdna.com"
+  },
+  "contributors": [
+    {
+      "name": "Darin Spivey",
+      "email": "darin.spivey@logdna.com"
+    },
+    {
+      "name": "Jakub Jirutka",
+      "email": "jakub@jirutka.cz"
+    },
+    {
+      "name": "Ryan Mottley",
+      "email": "ryan.mottley@logdna.com"
+    },
+    {
+      "name": "Laura Santamaria",
+      "email": "dev@nimbinatus.com"
+    }
+  ],
   "license": "SEE LICENSE IN LICENSE",
   "eslintConfig": {
     "root": true,
