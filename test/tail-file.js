@@ -206,7 +206,9 @@ test('Success: tail file from beginning if it is truncated', async (t) => {
   )
 })
 
-test('Success: File may disappear, but continues if the file re-appears', async (t) => {
+test('Success: File may disappear, but continues if the file re-appears', (t) => {
+  t.plan(6)
+
   const name = 'logfile.txt'
   const testDir = t.testdir({
     [name]: ''
@@ -215,24 +217,54 @@ test('Success: File may disappear, but continues if the file re-appears', async 
 
   const tail = new TailFile(filename, {
     encoding: 'utf8'
-  , pollFileIntervalMs: 10
+  , pollFileIntervalMs: 100
+  , maxPollFailures: 500 // Do not let max polls throw this test
   })
+
+  const symbols = getSymbols(tail)
 
   t.teardown(() => {
     tail.quit().catch(fail)
   })
 
-  await tail.start()
-  await fs.promises.unlink(filename)
-  await fs.promises.writeFile(filename, 'The file has been re-created\n')
-  const [renamedEvt] = await once(tail, 'renamed')
-  t.match(renamedEvt, {
-    message: 'The file was renamed or rolled.  Tailing resumed from the beginning.'
-  , filename
-  , when: Date
-  }, 'renamed event is correct')
-  const [lineAfterRecreate] = await once(tail, 'data')
-  t.equal(lineAfterRecreate, 'The file has been re-created\n', 'Got line from new file')
+  tail.once('retry', (evt) => {
+    t.match(evt, {
+      message: 'File disappeared. Retrying.'
+    , filename
+    , attempts: 1 // The retry will fire for every retry attempt, so listen only once
+    , when: Date
+    }, 'retry event received')
+  })
+
+  tail.on('renamed', (evt) => {
+    t.match(evt, {
+      message: 'The file was renamed or rolled.  Tailing resumed from the beginning.'
+    , filename
+    , when: Date
+    }, 'renamed event is correct')
+  })
+
+  tail.on('data', (lineAfterRecreate) => {
+    t.equal(lineAfterRecreate, 'The file has been re-created\n', 'Got line from new file')
+  })
+
+  tail.start()
+
+  t.test('Pause briefly after starting', async () => {
+    await sleep(100)
+  })
+
+  t.test('Remove the original file and pause for a long time', async () => {
+    await fs.promises.unlink(filename)
+    // Certain OS's will use the same inode.  Force a different one to test the branch
+    // that would call `_readRemainderFromFileHandle()` twice
+    tail[symbols.inode] = 123456
+    await sleep(500)
+  })
+
+  t.test('Write a new file after a long pause', async (t) => {
+    await fs.promises.writeFile(filename, 'The file has been re-created\n')
+  })
 })
 
 test('Success: Stream backpressure is respected for a large file', (t) => {
@@ -423,7 +455,7 @@ test('Error: Unknown error received during polling causes an exit', (t) => {
   tail.start()
 })
 
-test('Handled: Error reading remaining file bits emits tail_error', async (t) => {
+test('Handled: Error reading old FH emits tail_error after ENOENT', async (t) => {
   const name = 'logfile.txt'
   const testDir = t.testdir({
     [name]: ''
@@ -445,14 +477,52 @@ test('Handled: Error reading remaining file bits emits tail_error', async (t) =>
   await fs.promises.appendFile(filename, 'Here is line 3\n')
   await fs.promises.rename(filename, path.join(testDir, `${name}.rolled`))
   // Manually call poll just to eliminate race conditions with this test
-  // Close the FH first to trigger an error
+  // Close the FH first to trigger an error after `ENOENT` is thrown.
+  const tail_error = once(tail, 'tail_error')
   await tail[symbols.fileHandle].close()
   await tail._pollFileForChanges()
-  const [evt] = await once(tail, 'tail_error')
+  const [evt] = await tail_error
   t.match(evt, {
     name: 'Error'
   , code: 'EBADF'
   }, 'Got tail_error as expected')
+})
+
+test('Handled: Error reading old FH emits tail_error after inode changes', async (t) => {
+  const name = 'logfile.txt'
+  const testDir = t.testdir({
+    [name]: ''
+  })
+  const filename = path.join(testDir, name)
+  const tail = new TailFile(filename, {
+    encoding: 'utf8'
+  , pollFileIntervalMs: 10000000 // We will manually activate polling
+  })
+  const symbols = getSymbols(tail)
+
+  t.teardown(() => {
+    tail.quit().catch(fail)
+  })
+
+  await tail.start()
+  // Manually call poll just to eliminate race conditions with this test
+  // Close the FH first to trigger an error after `ENOENT` is thrown.
+  const tail_error = once(tail, 'tail_error')
+  await tail[symbols.fileHandle].close()
+  tail[symbols.inode] = 12345678
+  await fs.promises.appendFile(filename, 'Here is a new line')
+  await tail._pollFileForChanges()
+  const [evt] = await tail_error
+  t.match(evt, {
+    name: 'Error'
+  , message: 'Could not read remaining bytes from old FH'
+  , meta: {
+      error: String // Error differs per OS
+    , code: 'EBADF'
+    }
+  }, 'Got tail_error as expected')
+  const [newData] = await once(tail, 'data')
+  t.equal(newData, 'Here is a new line', 'New data was read after FH read failure')
 })
 
 test('Quitting destroys any open tail file stream', (t) => {

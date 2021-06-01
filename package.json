@@ -83,6 +83,7 @@
     "jsx": false,
     "check-coverage": true,
     "jobs": 1,
+    "timeout": 60,
     "coverage-report": [
       "text",
       "text-summary",

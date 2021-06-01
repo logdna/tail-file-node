@@ -44,8 +44,8 @@ test('Memory consumption', async (t) => {
       clearTimeout(timer)
       if (++counter % 10000 === 0) {
         const usage = process.memoryUsage()
-        if (usage.rss < rssMin) rssMin = usage.rss
-        if (usage.rss > rssMax) rssMax = usage.rss
+        rssMin = Math.min(usage.rss, rssMin)
+        rssMax = Math.max(usage.rss, rssMax)
         t.pass(`Memory usage at ${counter} lines: ${JSON.stringify(usage)}`)
       }
       timer = setTimeout(() => {
