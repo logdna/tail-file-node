@@ -74,12 +74,11 @@
     "eslint": "^7.27.0",
     "eslint-config-logdna": "^5.1.0",
     "husky": "^4.3.0",
-    "tap": "^14.10.7",
+    "tap": "^15.0.9",
     "tap-xunit": "^2.4.1"
   },
   "tap": {
     "100": true,
-    "esm": false,
     "ts": false,
     "jsx": false,
     "check-coverage": true,
