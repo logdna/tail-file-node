@@ -1,10 +1,18 @@
 #!/bin/bash
 
+# To avoid committing a giant file, this appends a bunch of data onto the log filename
+# provided in argv[1]
+
 COUNTER=0
 MAX=1000
 
+FILENAME=$1
+
+if [ -z $FILENAME ]; then
+  exit 0
+fi
+
 while [ $COUNTER -lt $MAX ]; do
-  #sleep 0.03
   echo '[2016-04-13T17:37:22,589] 1778154862 INFO  [client-handler-worker-35] com.django.taas.auth.consumer.lib.service.DefaultAuthConsumerService - Digest calculation message: POST/profilerator/v1/profiles.protodjango-auth-token<DjangoAuthTokens xmlns="com:django:util:crypto:auth:jaxb" xmlns:ns2="com:django:util:crypto:jaxb:v1:authrsp" xmlns:ns3="service:django:ts:1"><DjangoAuthToken><Type>djangoAccount</Type><Cipher>DJANGO1111</Cipher><Version>1.0</Version><Principal>rFqV3G_OidcnFrU7YVsHmA<Principal><Token>0cwfvw7-5NtopgtlXgj97wRS_Q6m25Qib3dVRCvASGreOF2RD3HHoHO9uc8FDfPy</Token><Signature>w8QTcZEoes0oJ+L9CgytqvcwlGx1iONXx2cfV+l+p7o=</Signature><AppId>5KD-PXR_bovYufXc6Es0QQ</AppId></DjangoAuthToken><DjangoAuthToken><Type>djangoDevice</Type><Cipher>DJANGO1111</Cipher><Version>1.0</Version><Principal>N_iBMhq17IDOIOT64NswYmO2ewM7Ws3IlCubhcDmPefeOF2RD3HHoHO9uc8FDfPy</Principal><Token>0cwfvw7-5NtopgtlXgj97wRS_Q6m25Qib3dVRCvASGreOF2RD3HHoHO9uc8FDfPy</Token><Signature>qf/hH7MdGK9GQuwOU5e/elCuv0Ygaz97YsqruLNKqs0=</Signature><AppId>5KD-PXR_bovYufXc6Es0QQ</AppId></DjangoAuthToken></DjangoAuthTokens>django-body-compressedresdjango-body-encryptedbothdjango-cipher-nameDJANGO1111django-cipher-version1.01jQWn9lqTV35fz4+M+huzNjo0yWqMZlOFoPouW30ZYtQzir+e/JQjobF1FlT53QtL/YK5Hs7ULo3v8X27/gjlaTxg2F0fe/cERcb5SB7aXc=
  at com.django.taas.auth.handler.codec.http.HttpDjangoRequestDecoder.createMessage(HttpDjangoRequestDecoder.java:54) ~[authConsumer.jar:?]
 [2016-04-13T17:37:58,359] 1778190632 INFO  [client-handler-worker-30] com.django.taas.auth.consumer.lib.service.DefaultAuthConsumerService - Digests dont match: statedDigest=L5EQLJoa5XbcpR88+t4otvQDP7I=, calcDigest=WZmSfVa0f/wl//EeMkff0Kbcba0=
@@ -318,7 +326,6 @@ w56fff4b02ab586117f929e73-4e9f8a5c1d176425f72457be00d23cd1-7410-com.django.acme.
 v570adb5dc073c74633436f4b-1aae75e182e32a1140d220237474336e-420-com.django.acme.service.message.RefreshMessage-true-false
 
 v57075ccaf6bf86cd677950f8-a6ae12ef1e7a7bb5169e6bb763f567da-280-com.django.acme.service.message.RefreshMessage-true-false
-[2016-04-13T17:49:23,009] 1778875282 INFO  [client-handler-worker-40] com.django.taas.auth.consumer.lib.service.DefaultAuthConsumerService - Digest calculation message: POST/acme/sync/v1/5cf5bcebeb3b032bd98521cafb9ad1bddjango-auth-token<DjangoAuthTokens xmlns="com:django:util:crypto:auth:jaxb" xmlns:ns2="com:django:util:crypto:jaxb:v1:authrsp" xmlns:ns3="service:django:ts:1"><DjangoAuthToken><Type>djangoAccount</Type><Cipher>DJANGO1111</Cipher><Version>1.0</Version><Principal>vZIm4GhQh5XETEyrZ_Qw-Q</Principal><Token>9orABVUCCzMIcl9Q7hyKLpx5pWon-mO68rFKDXGOUvreOF2RD3HHoHO9uc8FDfPy</Token><Signature>3QrXOm+3xBC7ELbnOhGd9jTuRTegBvrs3BIFuIP5Qeg=</Signature></DjangoAuthToken><DjangoAuthToken><Type>djangoDevice</Type><Cipher>DJANGO1111</Cipher><Version>1.0</Version><Principal>mV7EuzesBlPG8ouaaYjOeYznf1hM-CVLW_cVBt5jf4XeOF2RD3HHoHO9uc8FDfPy</Principal><Token>9orABVUCCzMIcl9Q7hyKLpx5pWon-mO68rFKDXGOUvreOF2RD3HHoHO9uc8FDfPy</Token><Signature>NWNpDzXst2xXr3TGmyrgQ2/zqkhPRPJDsbOktgZafgM=</Signature></DjangoAuthToken></DjangoAuthTokens>django-body-compressednonedjango-body-encryptednonedjango-cipher-nameDJANGO1111django-cipher-version1.0' >> ./log-to-tail.log
+[2016-04-13T17:49:23,009] 1778875282 INFO  [client-handler-worker-40] com.django.taas.auth.consumer.lib.service.DefaultAuthConsumerService - Digest calculation message: POST/acme/sync/v1/5cf5bcebeb3b032bd98521cafb9ad1bddjango-auth-token<DjangoAuthTokens xmlns="com:django:util:crypto:auth:jaxb" xmlns:ns2="com:django:util:crypto:jaxb:v1:authrsp" xmlns:ns3="service:django:ts:1"><DjangoAuthToken><Type>djangoAccount</Type><Cipher>DJANGO1111</Cipher><Version>1.0</Version><Principal>vZIm4GhQh5XETEyrZ_Qw-Q</Principal><Token>9orABVUCCzMIcl9Q7hyKLpx5pWon-mO68rFKDXGOUvreOF2RD3HHoHO9uc8FDfPy</Token><Signature>3QrXOm+3xBC7ELbnOhGd9jTuRTegBvrs3BIFuIP5Qeg=</Signature></DjangoAuthToken><DjangoAuthToken><Type>djangoDevice</Type><Cipher>DJANGO1111</Cipher><Version>1.0</Version><Principal>mV7EuzesBlPG8ouaaYjOeYznf1hM-CVLW_cVBt5jf4XeOF2RD3HHoHO9uc8FDfPy</Principal><Token>9orABVUCCzMIcl9Q7hyKLpx5pWon-mO68rFKDXGOUvreOF2RD3HHoHO9uc8FDfPy</Token><Signature>NWNpDzXst2xXr3TGmyrgQ2/zqkhPRPJDsbOktgZafgM=</Signature></DjangoAuthToken></DjangoAuthTokens>django-body-compressednonedjango-body-encryptednonedjango-cipher-nameDJANGO1111django-cipher-version1.0' >> $FILENAME
   let COUNTER=COUNTER+1
-  echo $COUNTER
 done
