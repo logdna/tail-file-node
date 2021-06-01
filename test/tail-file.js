@@ -15,7 +15,7 @@ test('Exports structure', async (t) => {
   t.equal(TailFile.name, 'TailFile', 'Class name is correct')
 
   const methods = Object.getOwnPropertyNames(TailFile.prototype)
-  t.deepEqual(methods, [
+  t.same(methods, [
     'constructor'
   , 'start'
   , '_openFile'
@@ -41,7 +41,7 @@ test('TailFile instance properties', async (t) => {
     const tail = new TailFile(__filename)
     const symbols = getSymbols(tail)
 
-    tt.deepEqual(tail[symbols.opts], {}, 'opts default values is correct')
+    tt.same(tail[symbols.opts], {}, 'opts default values is correct')
     tt.equal(tail[symbols.filename], __filename, 'filename value is correct')
     tt.equal(tail[symbols.pollFileIntervalMs], 1000, 'pollFileIntervalMs value correct')
     tt.equal(tail[symbols.pollFailureRetryMs], 200, 'pollFailureRetryMs value is correct')
@@ -413,7 +413,7 @@ test('Error: Unknown error received during polling causes an exit', (t) => {
   const tail = new TailFile(__filename)
     .on('error', (err) => {
       t.type(err, Error, 'Error was returned')
-      t.deepEqual(err, {
+      t.same(err, {
         name: 'Error'
       , message: 'FS STAT ERROR'
       , code: 'ENOPE'
