@@ -1,3 +1,11 @@
+# 2021-06-02, Version 2.0.7 (Stable)
+
+* [[558e3233bf](https://github.com/logdna/tail-file-node/commit/558e3233bf)] - deps: tap@15.0.9 (Darin Spivey)
+* [[01b7dd722f](https://github.com/logdna/tail-file-node/commit/01b7dd722f)] - deps: eslint-config-logdna@5.1.0 (Darin Spivey)
+* [[36de02bc9e](https://github.com/logdna/tail-file-node/commit/36de02bc9e)] - deps: eslint@7.27.0 (Darin Spivey)
+* [[08c8472cbf](https://github.com/logdna/tail-file-node/commit/08c8472cbf)] - fix: Error on rotated file if new file takes time to appear (Darin Spivey)
+* [[14faefe57e](https://github.com/logdna/tail-file-node/commit/14faefe57e)] - refactor: memory-usage tests should use a temp directory (Darin Spivey)
+
 # 2021-02-09, Version 2.0.6 (Stable)
 
 * [[b4934ce398](https://github.com/logdna/tail-file-node/commit/b4934ce398)] - fix: Move default branch to `main` and add contributors (Darin Spivey)
