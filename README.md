@@ -153,13 +153,17 @@ superclass. Additionally, it will emit the following custom events.
 
 ### Event: `'flush'`
 
-* No payload
+* [`<Object>`][]
+  * `lastReadPosition` [`<Number>`][] - The current file position at `flush` time
 
 This event is emitted when the underlying stream is done being read.
 If backpressure is in effect, then `_read()` may be called multiple
 times until it's flushed, so this event signals the end of the process.
 It is used primarily in shutdown to make sure the data is exhausted,
-and there should be no reason for the user to listen to this event.
+but users may listen for this event if the relative "read position" in the
+file is of interest.  For example, the `lastReadPosition` may be persisted to memory
+or database for resuming `tail-file` on a separate execution without missing
+any lines or duplicating them.
 
 ### Event: `'renamed'`
 
