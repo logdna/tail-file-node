@@ -320,6 +320,10 @@ test('Success: Filehandle close NOOPs on error', async (t) => {
   // Force an error for FH close.  NOTE: this mock is only needed for node 14
   // which does NOT throw an error as in 10 and 12.  Keeps converage at 100% for
   // the matrix.
+
+  const realFH = tail[symbols.fileHandle]
+  await realFH.close() // Prevent GC error from not closing this for real
+
   tail[symbols.fileHandle] = {
     close: async () => {
       throw new Error('NOPE')
