@@ -26,6 +26,13 @@ interface RetryEventPayload extends EventPayload {
   attempts: number
 }
 
+interface FlushEventPayload {
+  /**
+   * The `lastReadPosition` represents the `startPos` value at the time of flushing
+   */
+  lastReadPosition: number
+}
+
 interface TailErrorEventPayload {
   /**
    * The error message as written by `TailFile`.
@@ -59,7 +66,7 @@ interface ReadableEvents {
 }
 
 interface TailFileEvents extends ReadableEvents {
-  flush: () => void
+  flush: (payload: FlushEventPayload) => void
   renamed: (payload: EventPayload) => void
   retry: (payload: RetryEventPayload) => void
   tail_error: (payload: TailErrorEventPayload) => void

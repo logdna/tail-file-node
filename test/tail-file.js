@@ -2,6 +2,7 @@
 
 const fs = require('fs')
 const path = require('path')
+const {pipeline} = require('stream')
 const {promisify} = require('util')
 const {once} = require('events')
 const {Transform} = require('stream')
@@ -360,6 +361,97 @@ test('Success: startPos can be provided to start tailing at a given place', (t) 
   })
 })
 
+test('Success: lastReadPosition is emitted with "flush" and is accurate', async (t) => {
+  const name = 'logfile.txt'
+  let lineCounter = 0
+  let lastReadPosition
+  let finalSize
+
+  function getLotsOfLines() {
+    // Add a line marker just to give some uniqueness for human-readability
+    let result = ''
+    const longLine = 'X'.repeat(100) + '\n'
+    for (let i = 0; i < 100; i++) {
+      result += `Line Counter: ${++lineCounter}\t` + longLine
+    }
+    return result
+  }
+
+  // Populate a log file then 1) consume 2) add more 3) consume from lastReadPosition
+  const testDir = t.testdir({
+    [name]: getLotsOfLines()
+  })
+  const logFile = path.join(testDir, name)
+  const clonedFile = path.join(testDir, 'cloned-logfile.txt')
+
+  t.test('Read some lines, then quit. Collect the `lastReadPosition`', (t) => {
+    const tail = new TailFile(logFile, {
+      startPos: 0 // Read the WHOLE file, not start from the end
+    })
+    const clonedStream = fs.createWriteStream(clonedFile)
+
+    tail
+      .on('flush', (evt) => {
+        lastReadPosition = evt.lastReadPosition
+        if (lastReadPosition > 0) {
+          tail.removeAllListeners('flush')
+          // The flush has received the appended data
+          tail.quit()
+        }
+      })
+      .start()
+
+    pipeline(tail, clonedStream, (err) => {
+      t.error(err, 'No error from piping between tail and the cloned file')
+      t.type(lastReadPosition, 'number', '"flush" emitted the `lastReadPosition`')
+      t.pass('The first pass of reading logfile.txt is complete!')
+      t.end()
+    })
+  })
+
+  t.test('Add more data to logfile.txt before tail starts', async (t) => {
+    // Since `tail-file` starts at the *end* of the file, append this data FIRST, then
+    // we will start from the last startPos and read it forward. This is different than
+    // starting the tail first, then adding data.
+
+    await fs.promises.appendFile(logFile, getLotsOfLines())
+    const {size} = await fs.promises.stat(logFile)
+    finalSize = size
+  })
+
+  t.test('Consume from logfile.txt from the `lastReadPosition`', (t) => {
+    // Start from the last-known position
+    const tail = new TailFile(logFile, {
+      startPos: lastReadPosition
+    })
+    const clonedStream = fs.createWriteStream(clonedFile, {flags: 'a'}) // append
+
+    tail
+      .on('flush', (evt) => {
+        lastReadPosition = evt.lastReadPosition // Save for asserting below
+        if (lastReadPosition === finalSize) {
+          tail.removeAllListeners('flush')
+          // Done reading, we can quit
+          t.pass('lastReadPosition is === the size of the file')
+          tail.quit()
+        }
+      })
+      .start()
+
+    pipeline(tail, clonedStream, (err) => {
+      t.error(err, 'No error from piping between tail and the cloned file')
+      t.pass('The second pass of reading logfile.txt is complete!')
+      t.end()
+    })
+  })
+
+  t.test('Verify the file is cloned (no duplicates)', async (t) => {
+    const original = await fs.promises.readFile(logFile, 'utf8')
+    const cloned = await fs.promises.readFile(clonedFile, 'utf8')
+    t.same(original, cloned, 'The files have the same contents')
+  })
+})
+
 test('Error: filename provided does not exist (throws on start)', async (t) => {
   const tail = new TailFile('THISFILEDOSNOTEXIST')
   await t.rejects(tail.start(), {
@@ -530,7 +622,7 @@ test('Handled: Error reading old FH emits tail_error after inode changes', async
 })
 
 test('Quitting destroys any open tail file stream', (t) => {
-  t.plan(4)
+  t.plan(5)
 
   const tail = new TailFile(__filename)
   const symbols = getSymbols(tail)
@@ -540,7 +632,8 @@ test('Quitting destroys any open tail file stream', (t) => {
       t.pass('TailFile emitted \'end\' event')
       t.ok(tail[symbols.stream]._readableState.destroyed, 'Underlying stream destroyed')
     })
-    .on('flush', () => {
+    .on('flush', (evt) => {
+      t.type(evt.lastReadPosition, 'number', 'lastReadPosition is in the "flush" event')
       t.pass('flush event received as expected')
     })
 
