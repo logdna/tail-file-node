@@ -1,3 +1,8 @@
+# 2021-06-08, Version 2.1.0 (Stable)
+
+* [[91762e0644](https://github.com/logdna/tail-file-node/commit/91762e0644)] - **(SEMVER-MINOR)** feat: Include `lastReadPosition` in the `flush` event (Darin Spivey)
+* [[165c5c95f2](https://github.com/logdna/tail-file-node/commit/165c5c95f2)] - fix: Fix test that causes a GC warning (Darin Spivey)
+
 # 2021-06-02, Version 2.0.7 (Stable)
 
 * [[558e3233bf](https://github.com/logdna/tail-file-node/commit/558e3233bf)] - deps: tap@15.0.9 (Darin Spivey)
