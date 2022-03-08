@@ -54,14 +54,14 @@ pipeline {
         stages {
           stage('Install') {
             environment {
-              GITHUB_PACKAGES_TOKEN = credentials('github-api-token')
+              GITHUB_TOKEN = credentials('github-api-token')
             }
 
             steps {
               sh 'mkdir -p .npm'
 
               script {
-                npm.auth token: "${GITHUB_PACKAGES_TOKEN}"
+                npm.auth token: "${GITHUB_TOKEN}"
               }
 
               sh 'npm install'
@@ -111,14 +111,14 @@ pipeline {
         NPM_CONFIG_CACHE = '.npm'
         NPM_CONFIG_USERCONFIG = '.npm/rc'
         SPAWN_WRAP_SHIM_ROOT = '.npm'
-        GITHUB_PACKAGES_TOKEN = credentials('github-api-token')
+        GITHUB_TOKEN = credentials('github-api-token')
       }
 
       steps {
         sh 'mkdir -p .npm'
 
         versioner(
-          token: "${GITHUB_PACKAGES_TOKEN}"
+          token: "${GITHUB_TOKEN}"
         , dry: true
         , repo: REPO
         , branch: DEFAULT_BRANCH
@@ -140,7 +140,7 @@ pipeline {
       }
 
       environment {
-        GITHUB_PACKAGES_TOKEN = credentials('github-api-token')
+        GITHUB_TOKEN = credentials('github-api-token')
         NPM_PUBLISH_TOKEN = credentials('npm-publish-token')
         NPM_CONFIG_CACHE = '.npm'
         NPM_CONFIG_USERCONFIG = '.npm/rc'
@@ -153,7 +153,7 @@ pipeline {
         sh "git checkout -b ${GIT_BRANCH} origin/${GIT_BRANCH}"
 
         versioner(
-          token: "${GITHUB_PACKAGES_TOKEN}"
+          token: "${GITHUB_TOKEN}"
         , dry: false
         , repo: REPO
         , NPM_PUBLISH_TOKEN: "${NPM_PUBLISH_TOKEN}"
