@@ -1,3 +1,7 @@
+# 2022-03-14, Version 2.1.1 (Stable)
+
+* [[feb1886d1c](https://github.com/logdna/tail-file-node/commit/feb1886d1c)] - ci: `GITHUB_PACKAGES_TOKEN` to `GITHUB_TOKEN` (Charles Thomas) [REL-731](https://logdna.atlassian.net/browse/REL-731)
+
 # 2021-06-08, Version 2.1.0 (Stable)
 
 * [[91762e0644](https://github.com/logdna/tail-file-node/commit/91762e0644)] - **(SEMVER-MINOR)** feat: Include `lastReadPosition` in the `flush` event (Darin Spivey)
