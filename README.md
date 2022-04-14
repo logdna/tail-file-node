@@ -17,6 +17,7 @@ in Node.js could also benefit from using this.
   * [Example consuming `data` events](#example-consuming-data-events)
   * [Example using `pipe`](#example-using-pipe)
   * [Example using `readline`](#example-using-readline)
+  * [Example for Clean Shutdown](#example-for-clean-shutdown)
 * **[Events](#events)**
   * [Event: 'flush'](#event-flush)
   * [Event: 'renamed'](#event-renamed)
@@ -144,6 +145,46 @@ startTail().catch((err) => {
     throw err
   })
 })
+```
+
+### Example for Clean Shutdown
+
+`TailFile` will call `flush()` when `quit()` is called.  Therefore, to exit  cleanly,
+one must simply await the `quit` call.  If the implementation wishes to keep track of
+the last position read from the file (for resuming in the same spot later, for example),
+then a simple listener can be added to always track the file position.  That way, when
+`quit()` is called, it will get properly updated.
+
+```js
+const TailFile = require('@logdna/tail-file')
+let position // Can be used to resume the last position from a new instance
+
+const tail = new TailFile('./somelog.txt')
+
+process.on('SIGINT', () => {
+  tail.quit()
+    .then(() => {
+      console.log(`The last read file position was: ${position}`)
+    })
+    .catch((err) => {
+      process.nextTick(() => {
+        console.error('Error during TailFile shutdown', err)
+      })
+    })
+})
+
+tail
+  .on('flush', ({lastReadPosition}) => {
+    position = lastReadPosition
+  })
+  .on('data', (chunk) => {
+    console.log(chunk.toString())
+  })
+  .start()
+  .catch((err) => {
+    console.error('Cannot start.  Does the file exist?', err)
+    throw err
+  })
 ```
 
 ## Events
@@ -274,7 +315,7 @@ that data will not flow through the stream [until it's consumed][reading modes].
 * Returns: `undefined`
 * Emits: [`close`](#event-any-readable-event) when the parent `Readstream` is ended.
 
-This function closes all streams and exits cleanly.  The parent `TailFile` stream will be
+This function calls `flush`, then closes all streams and exits cleanly.  The parent `TailFile` stream will be
 properly ended by pushing `null`, therefore an `end` event may be emitted as well.
 
 ## Program Flow
@@ -306,7 +347,7 @@ but `pipe` or [data events][data] are not immediately set up, `TailFile` may enc
 backpressure if its [`push()`][push] calls exceed the [high water mark][high water].
 Backpressure can also happen if `TailFile` becomes unpiped.
 In these cases, `TailFile` will stop polling and wait until data is flowing before
-polling resumes.  
+polling resumes.
 
 ### Log Rolling During Backpressure
 
