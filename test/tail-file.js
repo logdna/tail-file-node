@@ -195,11 +195,13 @@ test('Success: tail file from beginning if it is truncated', async (t) => {
   , filename
   , when: Date
   }, 'Truncated event received')
+
+  const once_data = once(tail, 'data')
   await fs.promises.appendFile(
     filename
   , 'This line is in the same file, but at the top\n'
   )
-  const [lineAfterTruncate] = await once(tail, 'data')
+  const [lineAfterTruncate] = await once_data
   t.equal(
     lineAfterTruncate
   , 'This line is in the same file, but at the top\n'
