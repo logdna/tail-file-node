@@ -1,3 +1,11 @@
+# 2022-04-15, Version 2.2.0 (Stable)
+
+* [[9dbe1edf07](https://github.com/logdna/tail-file-node/commit/9dbe1edf07)] - fix: `destroyOnReturn` backward compatibility for node (Darin Spivey)
+* [[860045ec12](https://github.com/logdna/tail-file-node/commit/860045ec12)] - **(SEMVER-MINOR)** fix: Necessary changes for asyncIterators in recent version of node (Darin Spivey)
+* [[a6dc7baa3d](https://github.com/logdna/tail-file-node/commit/a6dc7baa3d)] - fix: Fix flakey test (Darin Spivey)
+* [[215b293099](https://github.com/logdna/tail-file-node/commit/215b293099)] - fix: Bump node versions for CI (Darin Spivey)
+* [[b9453b39d4](https://github.com/logdna/tail-file-node/commit/b9453b39d4)] - fix: README should explain a clean shutdown (Darin Spivey)
+
 # 2022-03-14, Version 2.1.1 (Stable)
 
 * [[feb1886d1c](https://github.com/logdna/tail-file-node/commit/feb1886d1c)] - ci: `GITHUB_PACKAGES_TOKEN` to `GITHUB_TOKEN` (Charles Thomas) [REL-731](https://logdna.atlassian.net/browse/REL-731)
