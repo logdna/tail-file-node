@@ -8,8 +8,18 @@
     "test:ci": "tools/test-ci.sh",
     "test": "tap",
     "lint": "eslint ./",
-    "pretest": "npm run lint"
+    "commitlint": "commitlint --from=origin/main --to=HEAD",
+    "release": "semantic-release",
+    "release:dry": "semantic-release --dry-run --no-ci --branches ${BRANCH_NAME:-main}",
+    "pretest": "npm run lint && npm run commitlint"
   },
+  "files": [
+    "lib/**",
+    "index.js",
+    "index.d.ts",
+    "*.md",
+    "LICENSE"
+  ],
   "keywords": [
     "tail -f",
     "tail",
@@ -18,8 +28,9 @@
     "streams",
     "tail stream"
   ],
+  "engineStrict": true,
   "engines": {
-    "node": ">=10.3.0"
+    "node": ">= 12"
   },
   "bugs": {
     "url": "https://github.com/logdna/tail-file-node/issues"
@@ -29,17 +40,18 @@
     "access": "public"
   },
   "repository": {
-    "url": "https://github.com/logdna/tail-file-node"
+    "type": "git",
+    "url": "git+ssh://git@github.com/logdna/tail-file-node"
   },
   "homepage": "https://github.com/logdna/tail-file-node",
   "author": {
-    "name": "LogDNA, Inc.",
-    "email": "help@logdna.com"
+    "name": "Darin Spivey",
+    "email": "darin.spivey@mezmo.com"
   },
   "contributors": [
     {
       "name": "Darin Spivey",
-      "email": "darin.spivey@logdna.com"
+      "email": "darin.spivey@mezmo.com"
     },
     {
       "name": "Jakub Jirutka",
@@ -47,7 +59,7 @@
     },
     {
       "name": "Ryan Mottley",
-      "email": "ryan.mottley@logdna.com"
+      "email": "ryan.mottley@mezmo.com"
     },
     {
       "name": "Laura Santamaria",
@@ -69,11 +81,11 @@
     }
   },
   "devDependencies": {
-    "@commitlint/cli": "^11.0.0",
-    "@commitlint/config-conventional": "^11.0.0",
-    "eslint": "^7.27.0",
-    "eslint-config-logdna": "^5.1.0",
-    "husky": "^4.3.0",
+    "@logdna/commitlint-config": "^2.0.0",
+    "eslint": "^8.18.0",
+    "eslint-config-logdna": "^6.1.0",
+    "semantic-release": "^17.4.7",
+    "semantic-release-config-logdna": "^1.3.0",
     "tap": "^15.0.9",
     "tap-xunit": "^2.4.1"
   },
@@ -88,6 +100,7 @@
       "text",
       "text-summary",
       "json",
+      "json-summary",
       "html"
     ],
     "reporter": "tap",
@@ -101,62 +114,9 @@
     ],
     "output-file": "coverage/.tap-output"
   },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "prepare-commit-msg": "tools/git-commit-template.js"
-    }
-  },
   "commitlint": {
-    "rules": {
-      "body-leading-blank": [
-        2,
-        "always"
-      ],
-      "body-max-line-length": [
-        2,
-        "always",
-        72
-      ],
-      "body-min-length": [
-        2,
-        "always",
-        20
-      ],
-      "subject-max-length": [
-        2,
-        "always",
-        72
-      ],
-      "scope-empty": [
-        2,
-        "always"
-      ],
-      "subject-full-stop": [
-        2,
-        "never",
-        "."
-      ],
-      "type-enum": [
-        2,
-        "always",
-        [
-          "feat",
-          "deps",
-          "fix",
-          "docs",
-          "package",
-          "style",
-          "refactor",
-          "test",
-          "revert",
-          "WIP"
-        ]
-      ],
-      "type-empty": [
-        2,
-        "never"
-      ]
-    }
+    "extends": [
+      "@logdna/commitlint-config"
+    ]
   }
 }

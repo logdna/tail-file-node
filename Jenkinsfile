@@ -4,9 +4,15 @@ def PROJECT_NAME = "tail-file-node"
 def REPO = "logdna/${PROJECT_NAME}"
 def TRIGGER_PATTERN = ".*@logdnabot.*"
 def DEFAULT_BRANCH = 'main'
+def CURRENT_BRANCH = [env.CHANGE_BRANCH, env.BRANCH_NAME]?.find{branch -> branch != null}
 
 pipeline {
-  agent none
+  agent {
+    node {
+      label 'ec2-fleet'
+      customWorkspace "${PROJECT_NAME}-${BUILD_NUMBER}"
+    }
+  }
 
   options {
     timestamps()
@@ -15,6 +21,13 @@ pipeline {
 
   triggers {
     issueCommentTrigger(TRIGGER_PATTERN)
+  }
+
+  environment {
+    GITHUB_TOKEN = credentials('github-api-token')
+    NPM_CONFIG_CACHE = '.npm'
+    NPM_CONFIG_USERCONFIG = '.npmrc'
+    SPAWN_WRAP_SHIM_ROOT = '.npm'
   }
 
   stages {
@@ -35,41 +48,23 @@ pipeline {
         axes {
           axis {
             name 'NODE_VERSION'
-            values '10', '12', '14', '16', '17'
+            values '12', '14', '16', '17'
           }
         }
 
         agent {
           docker {
+            label 'ec2-fleet'
             image "us.gcr.io/logdna-k8s/node:${NODE_VERSION}"
           }
         }
 
-        environment {
-          NPM_CONFIG_CACHE = '.npm'
-          NPM_CONFIG_USERCONFIG = '.npm/rc'
-          SPAWN_WRAP_SHIM_ROOT = '.npm'
-        }
-
         stages {
-          stage('Install') {
-            environment {
-              GITHUB_TOKEN = credentials('github-api-token')
-            }
-
-            steps {
-              sh 'mkdir -p .npm'
-
-              script {
-                npm.auth token: "${GITHUB_TOKEN}"
-              }
-
-              sh 'npm install'
-            }
-          }
-
           stage('Test') {
             steps {
+              sh "mkdir -p ${NPM_CONFIG_CACHE}"
+              sh 'mkdir -p coverage'
+              sh 'npm install'
               sh 'npm run test:ci'
             }
 
@@ -94,7 +89,6 @@ pipeline {
 
     stage('Test Release') {
       when {
-        beforeAgent true
         not {
           branch DEFAULT_BRANCH
         }
@@ -102,63 +96,57 @@ pipeline {
 
       agent {
         docker {
+          label 'ec2-fleet'
           image "us.gcr.io/logdna-k8s/node:16-ci"
           customWorkspace "${PROJECT_NAME}-${BUILD_NUMBER}"
         }
       }
 
       environment {
-        NPM_CONFIG_CACHE = '.npm'
-        NPM_CONFIG_USERCONFIG = '.npm/rc'
-        SPAWN_WRAP_SHIM_ROOT = '.npm'
-        GITHUB_TOKEN = credentials('github-api-token')
+        GIT_BRANCH = "${CURRENT_BRANCH}"
+        BRANCH_NAME = "${CURRENT_BRANCH}"
+        CHANGE_ID = ""
+        NPM_TOKEN = credentials('npm-publish-token')
       }
 
       steps {
-        sh 'mkdir -p .npm'
-
-        versioner(
-          token: "${GITHUB_TOKEN}"
-        , dry: true
-        , repo: REPO
-        , branch: DEFAULT_BRANCH
-        )
+        script {
+          sh "mkdir -p ${NPM_CONFIG_CACHE}"
+          sh 'npm install'
+          sh "npm run release:dry"
+        }
       }
     }
 
     stage('Release') {
       when {
-        beforeAgent true
         branch DEFAULT_BRANCH
+        not {
+          changelog '\\[skip ci\\]'
+        }
       }
 
       agent {
         docker {
+          label 'ec2-fleet'
           image "us.gcr.io/logdna-k8s/node:16-ci"
           customWorkspace "${PROJECT_NAME}-${BUILD_NUMBER}"
         }
       }
 
       environment {
-        GITHUB_TOKEN = credentials('github-api-token')
-        NPM_PUBLISH_TOKEN = credentials('npm-publish-token')
-        NPM_CONFIG_CACHE = '.npm'
-        NPM_CONFIG_USERCONFIG = '.npm/rc'
-        SPAWN_WRAP_SHIM_ROOT = '.npm'
+        GIT_BRANCH = "${CURRENT_BRANCH}"
+        BRANCH_NAME = "${CURRENT_BRANCH}"
+        CHANGE_ID = ""
+        NPM_TOKEN = credentials('npm-publish-token')
       }
 
       steps {
-        sh 'mkdir -p .npm'
-
-        sh "git checkout -b ${GIT_BRANCH} origin/${GIT_BRANCH}"
-
-        versioner(
-          token: "${GITHUB_TOKEN}"
-        , dry: false
-        , repo: REPO
-        , NPM_PUBLISH_TOKEN: "${NPM_PUBLISH_TOKEN}"
-        , branch: DEFAULT_BRANCH
-        )
+        script {
+          sh "mkdir -p ${NPM_CONFIG_CACHE}"
+          sh 'npm install'
+          sh 'npm run release'
+        }
       }
     }
   }
