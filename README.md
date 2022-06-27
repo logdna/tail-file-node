@@ -33,6 +33,7 @@ in Node.js could also benefit from using this.
 * **[How Log Rolling is Handled](#how-log-rolling-is-handled)**
 * **[Backpressure Pauses Polling](#backpressure-pauses-polling)**
   * [Log Rolling During Backpressure](#log-rolling-during-backpressure)
+* **[Contributing](#contributing)**
 
 
 ## Features
@@ -359,6 +360,15 @@ changes will be off.
 This is an *extrememly unlikely* edge case, however we recommend consuming the `TailFile`
 stream almost immediately upon creation.
 
+## Contributing
+
+This project is open-sourced, and accepts PRs from the public for bugs or feature
+enhancements. These are the guidelines for contributing:
+
+* The project uses [Commitlint][] and enforces [Conventional Commit Standard][]. Please format your commits based on these guidelines.
+* An [issue must be opened](https://github.com/logdna/tail-file-node/issues) in the repository for any bug, feature, or anything else that will have a PR
+  * The commit message must reference the issue with an [acceptable action tag](https://github.com/logdna/commitlint-config/blob/41aef3b69f292e39fb41a5ef24bcd7043e0fceb3/index.js#L12-L20) in the commit footer, e.g. `Fixes: #5`
+
 [`<Promise>`]: https://mdn.io/promise
 [`<Date>`]: https://mdn.io/date
 [`<Number>`]: https://mdn.io/number
@@ -375,3 +385,5 @@ stream almost immediately upon creation.
 [async/await iterators]: https://nodejs.org/dist/latest-v12.x/docs/api/stream.html#stream_consuming_readable_streams_with_async_iterators
 [push]: https://nodejs.org/dist/latest-v12.x/docs/api/stream.html#stream_readable_push_chunk_encoding
 [high water]: https://nodejs.org/dist/latest-v12.x/docs/api/stream.html#stream_readable_readablehighwatermark
+[Commitlint]: https://commitlint.js.org
+[Conventional Commit Standard]: https://www.conventionalcommits.org/en/v1.0.0/
