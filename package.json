@@ -36,6 +36,12 @@
     "url": "https://github.com/logdna/tail-file-node/issues"
   },
   "private": false,
+  "release": {
+    "extends": "semantic-release-config-logdna",
+    "branches": [
+      "main"
+    ]
+  },
   "publishConfig": {
     "access": "public"
   },
