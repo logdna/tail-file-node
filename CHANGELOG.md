@@ -1,3 +1,24 @@
+## Changelog
+
+# [3.0.0](https://github.com/logdna/tail-file-node/compare/v2.2.0...v3.0.0) (2022-06-27)
+
+
+### Bug Fixes
+
+* **deps**: Fix missing release section in package.json [4f06d83](https://github.com/logdna/tail-file-node/commit/4f06d83bc5137cb8b56f539b8d33f2c48ab6f987) - Darin Spivey, closes: [#28](https://github.com/logdna/tail-file-node/issues/28)
+
+
+### Chores
+
+* **deps**: Change `commitlint` tooling and add `semantic-release` [aeb7e58](https://github.com/logdna/tail-file-node/commit/aeb7e584ff674d385df680b4b2c128b16692ea94) - Darin Spivey, closes: [#28](https://github.com/logdna/tail-file-node/issues/28)
+
+
+### **BREAKING CHANGES**
+
+* **deps:** `eslint@8.x` and other dependencies no longer support
+node:10, so this change officially removes support for node:10 as
+we can no longer do regression testing for it.
+
 # 2022-04-15, Version 2.2.0 (Stable)
 
 * [[9dbe1edf07](https://github.com/logdna/tail-file-node/commit/9dbe1edf07)] - fix: `destroyOnReturn` backward compatibility for node (Darin Spivey)
