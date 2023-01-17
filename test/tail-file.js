@@ -95,7 +95,7 @@ test('Successfully tail a file using a transform pipe', (t) => {
       }
     })
 
-  t.test('Append lines to the file', async (tt) => {
+  t.test('Append lines to the file', async () => {
     await tail.start()
     await fs.promises.appendFile(filename, 'LINE 2\n')
     await fs.promises.appendFile(filename, 'LINE 3\n')
@@ -265,7 +265,7 @@ test('Success: File may disappear, but continues if the file re-appears', (t) =>
     await sleep(500)
   })
 
-  t.test('Write a new file after a long pause', async (t) => {
+  t.test('Write a new file after a long pause', async () => {
     await fs.promises.writeFile(filename, 'The file has been re-created\n')
   })
 })
@@ -306,7 +306,7 @@ test('Success: Stream backpressure is respected for a large file', (t) => {
     if (attempts === 10) t.fail(`File not cloned: ${output.size}/${input.size}`)
   }, 200)
 
-  t.test('Flood the log with large pieces of data', async (tt) => {
+  t.test('Flood the log with large pieces of data', async () => {
     await tail.start()
     let long = ''
     for (let i = 0; i < 10000; i++) {
@@ -316,7 +316,7 @@ test('Success: Stream backpressure is respected for a large file', (t) => {
   })
 })
 
-test('Success: Filehandle close NOOPs on error', async (t) => {
+test('Success: Filehandle close NOOPs on error', async () => {
   const tail = new TailFile(__filename)
   const symbols = getSymbols(tail)
   await tail.start()
@@ -411,7 +411,7 @@ test('Success: lastReadPosition is emitted with "flush" and is accurate', async 
     })
   })
 
-  t.test('Add more data to logfile.txt before tail starts', async (t) => {
+  t.test('Add more data to logfile.txt before tail starts', async () => {
     // Since `tail-file` starts at the *end* of the file, append this data FIRST, then
     // we will start from the last startPos and read it forward. This is different than
     // starting the tail first, then adding data.
@@ -496,7 +496,7 @@ test('Error: poll error will retry a certain number of times', (t) => {
       t.equal(retries, 2, 'Retry event count')
     })
 
-  t.test('Start', async (tt) => {
+  t.test('Start', async () => {
     await tail.start()
     await fs.promises.unlink(filename)
   })
@@ -639,7 +639,7 @@ test('Quitting destroys any open tail file stream', (t) => {
       t.pass('flush event received as expected')
     })
 
-  t.test('Quit', async (tt) => {
+  t.test('Quit', async () => {
     await tail.quit()
   })
 })

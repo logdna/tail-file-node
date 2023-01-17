@@ -16,7 +16,7 @@ test('Memory consumption', async (t) => {
   const testDir = os.tmpdir()
   const LOG_FILE_PATH = path.join(testDir, LOG_FILE_NAME)
 
-  t.test('Create a stub for the large log file', async (t) => {
+  t.test('Create a stub for the large log file', async () => {
     await fs.promises.writeFile(LOG_FILE_PATH, '', 'utf8')
   })
 
@@ -40,7 +40,7 @@ test('Memory consumption', async (t) => {
     let rssMin = Infinity
     let rssMax = 0
 
-    lineSplitter.on('line', (line) => {
+    lineSplitter.on('line', () => {
       clearTimeout(timer)
       if (++counter % 10000 === 0) {
         const usage = process.memoryUsage()
@@ -67,7 +67,7 @@ test('Memory consumption', async (t) => {
     })
   })
 
-  test('Cleanup (remove) the log file', async (t) => {
+  test('Cleanup (remove) the log file', async () => {
     await fs.promises.unlink(LOG_FILE_PATH)
   })
 })

@@ -89,7 +89,7 @@
   "devDependencies": {
     "@logdna/commitlint-config": "^2.0.0",
     "eslint": "^8.18.0",
-    "eslint-config-logdna": "^6.1.0",
+    "eslint-config-logdna": "^7.0.0",
     "semantic-release": "^17.4.7",
     "semantic-release-config-logdna": "^1.3.0",
     "tap": "^15.0.9",
