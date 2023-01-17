@@ -1,5 +1,14 @@
 ## Changelog
 
+## [3.0.1](https://github.com/logdna/tail-file-node/compare/v3.0.0...v3.0.1) (2023-01-17)
+
+
+### Chores
+
+* Include support for `node-18` [d097cbd](https://github.com/logdna/tail-file-node/commit/d097cbde4716d211df27c834b0f2367f72fad2c3) - Darin Spivey, closes: [#32](https://github.com/logdna/tail-file-node/issues/32)
+* **dep-dev**: bump eslint-config-logdna@7.0.0 [42ae9a0](https://github.com/logdna/tail-file-node/commit/42ae9a04c04cbd891c5773e6fef01ce56c75266b) - Darin Spivey, closes: [#33](https://github.com/logdna/tail-file-node/issues/33)
+* **dev-dep**: Bump tap@16 [b23860e](https://github.com/logdna/tail-file-node/commit/b23860ea3f87097a32573050c16b3e41718e7643) - Darin Spivey, closes: [#33](https://github.com/logdna/tail-file-node/issues/33)
+
 # [3.0.0](https://github.com/logdna/tail-file-node/compare/v2.2.0...v3.0.0) (2022-06-27)
 
 
