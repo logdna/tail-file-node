@@ -53,6 +53,14 @@ in Node.js could also benefit from using this.
 npm install @logdna/tail-file
 ```
 
+## Supported Versions of Node.js
+This package works with the following *supported* versions.  Other versions might work, but the ones listed here are officially tested.
+If backward-compatibility is lost over time, a `major` version will be released supporting
+the latest version, and deprecating incompatible versions. Users are then encouraged to try
+previous versions of this package for those deprecated versions of Node.js.
+
+**Node.js versions**: `12`, `14`, `16`, `18`
+
 ## Usage
 
 Instantiate an instance by passing the full path of a file to tail.
