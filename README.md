@@ -59,7 +59,7 @@ If backward-compatibility is lost over time, a `major` version will be released 
 the latest version, and deprecating incompatible versions. Users are then encouraged to try
 previous versions of this package for those deprecated versions of Node.js.
 
-**Node.js versions**: `12`, `14`, `16`, `18`
+**Node.js versions**: `18`, `20`
 
 ## Usage
 
