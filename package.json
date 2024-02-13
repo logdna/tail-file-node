@@ -30,7 +30,7 @@
   ],
   "engineStrict": true,
   "engines": {
-    "node": ">= 12"
+    "node": ">= 18"
   },
   "bugs": {
     "url": "https://github.com/logdna/tail-file-node/issues"

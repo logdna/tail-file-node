@@ -48,7 +48,7 @@ pipeline {
         axes {
           axis {
             name 'NODE_VERSION'
-            values '12', '14', '16', '18'
+            values '18', '20'
           }
         }
 
