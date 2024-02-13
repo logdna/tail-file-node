@@ -1,5 +1,18 @@
 ## Changelog
 
+# [4.0.0](https://github.com/logdna/tail-file-node/compare/v3.0.1...v4.0.0) (2024-02-13)
+
+
+### Bug Fixes
+
+* Set max listeners to tolerate backpressure [2c3a669](https://github.com/logdna/tail-file-node/commit/2c3a669f75a5aa94834b07e50be7c94302e28e46) - Darin Spivey, closes: [#41](https://github.com/logdna/tail-file-node/issues/41)
+
+
+### **BREAKING CHANGES**
+
+* `node 16` is becoming unsupported soon. Change the
+supported versions to be >= `18`
+
 ## [3.0.1](https://github.com/logdna/tail-file-node/compare/v3.0.0...v3.0.1) (2023-01-17)
 
 
