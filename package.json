@@ -72,7 +72,7 @@
       "email": "dev@nimbinatus.com"
     }
   ],
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "MIT",
   "eslintConfig": {
     "root": true,
     "ignorePatterns": [
