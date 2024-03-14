@@ -1,5 +1,12 @@
 ## Changelog
 
+## [4.0.1](https://github.com/logdna/tail-file-node/compare/v4.0.0...v4.0.1) (2024-03-14)
+
+
+### Bug Fixes
+
+* **pkg**: Set `license` in `package.json` accurately [52dd185](https://github.com/logdna/tail-file-node/commit/52dd185ea6f9bc51c881e8681c6e9da357c3ab8b) - Darin Spivey, closes: [#43](https://github.com/logdna/tail-file-node/issues/43)
+
 # [4.0.0](https://github.com/logdna/tail-file-node/compare/v3.0.1...v4.0.0) (2024-02-13)
 
 
