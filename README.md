@@ -321,7 +321,7 @@ that data will not flow through the stream [until it's consumed][reading modes].
 
 ### `tail.quit()`
 
-* Returns: `undefined`
+* Returns: [`<Promise>`][] - Resolves after `flush` is called and streams are closed.
 * Emits: [`close`](#event-any-readable-event) when the parent `Readstream` is ended.
 
 This function calls `flush`, then closes all streams and exits cleanly.  The parent `TailFile` stream will be
