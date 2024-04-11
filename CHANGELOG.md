@@ -1,5 +1,17 @@
 ## Changelog
 
+## [4.0.2](https://github.com/logdna/tail-file-node/compare/v4.0.1...v4.0.2) (2024-04-11)
+
+
+### Bug Fixes
+
+* **ci**: Skip release:dry for forks and call commitlint [9a26854](https://github.com/logdna/tail-file-node/commit/9a26854f0d358a6ebf21b57557fa02dd87196fe9) - Darin Spivey, closes: [#46](https://github.com/logdna/tail-file-node/issues/46)
+
+
+### Miscellaneous
+
+* Fix docs on return value of `quit` [6491654](https://github.com/logdna/tail-file-node/commit/6491654ed82db2a618d43a7bd30c7de3dbd8d602) - Darin Spivey
+
 ## [4.0.1](https://github.com/logdna/tail-file-node/compare/v4.0.0...v4.0.1) (2024-03-14)
 
 
