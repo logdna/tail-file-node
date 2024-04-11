@@ -113,7 +113,10 @@ pipeline {
         script {
           sh "mkdir -p ${NPM_CONFIG_CACHE}"
           sh 'npm install'
-          sh "npm run release:dry"
+          sh 'npm run commitlint'
+          if (!(env.CHANGE_FORK ==~ /.+/)) {
+            sh "npm run release:dry"
+          }
         }
       }
     }
