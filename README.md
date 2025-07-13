@@ -74,7 +74,7 @@ const TailFile = require('@logdna/tail-file')
 
 const tail = new TailFile('/path/to/your/logfile.txt', {encoding: 'utf8'})
   .on('data', (chunk) => {
-    console.log(`Recieved a utf8 character chunk: ${chunk}`)
+    console.log(`Received a utf8 character chunk: ${chunk}`)
   })
   .on('tail_error', (err) => {
     console.error('TailFile had an error!', err)
