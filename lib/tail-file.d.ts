@@ -96,6 +96,8 @@ declare namespace TailFile {
     /**
      * Options to pass to the `fs.createReadStream` function.
      * This is used for reading bytes that have been added to filename between every poll.
+     * Its highWaterMark also bounds rotated-file read requests, together with
+     * the outer Readable highWaterMark (the smaller value is used).
      */
     readStreamOpts?: ReadStreamOpts
 
@@ -138,6 +140,9 @@ declare class TailFile extends Readable {
    * Closes all streams and exits cleanly. The parent `TailFile` stream will
    * be properly ended by pushing null, therefore an end event may be emitted
    * as well.
+   * Graceful draining requires continued consumption and can wait indefinitely
+   * while backpressured. Use inherited destroy() for abortive cancellation and
+   * wait for close; unread bytes may be discarded.
    *
    * @emits close when the parent `ReadStream` is ended.
    */
