@@ -51,7 +51,7 @@ pipeline {
         axes {
           axis {
             name 'NODE_VERSION'
-            values '18', '20'
+            values '22', '24', '26'
           }
         }
 
@@ -100,7 +100,7 @@ pipeline {
       agent {
         docker {
           label 'ec2-fleet'
-          image "us.gcr.io/logdna-k8s/node:18-ci"
+          image "us.gcr.io/logdna-k8s/node:24-ci"
           customWorkspace "${PROJECT_NAME}-${BUILD_NUMBER}"
         }
       }
@@ -135,7 +135,7 @@ pipeline {
       agent {
         docker {
           label 'ec2-fleet'
-          image "us.gcr.io/logdna-k8s/node:18-ci"
+          image "us.gcr.io/logdna-k8s/node:24-ci"
           customWorkspace "${PROJECT_NAME}-${BUILD_NUMBER}"
         }
       }
