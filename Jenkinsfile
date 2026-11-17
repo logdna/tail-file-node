@@ -35,11 +35,14 @@ pipeline {
       when {
         expression { env.CHANGE_FORK }
         not {
-          triggeredBy 'issueCommentCause'
+          anyOf {
+            triggeredBy 'issueCommentCause'
+            triggeredBy cause: 'UserIdCause'
+          }
         }
       }
       steps {
-        error("A maintainer needs to approve this PR for CI by commenting")
+        error("A maintainer needs to approve this PR for CI by commenting or starting a build")
       }
     }
 
