@@ -1,5 +1,22 @@
 ## Changelog
 
+# [5.0.0](https://github.com/logdna/tail-file-node/compare/v4.0.2...v5.0.0) (2026-11-17)
+
+
+### Chores
+
+* **deps**: Require Node.js 22 or newer [5c23675](https://github.com/logdna/tail-file-node/commit/5c23675a06ad4d02695d3333cea0cd7b8869fad8) - Darin Spivey, closes: [#53](https://github.com/logdna/tail-file-node/issues/53)
+
+
+### Continuous Integration
+
+* Let a maintainer-started build run fork PRs [e264367](https://github.com/logdna/tail-file-node/commit/e264367cf610bbe2a9ba6dd1149e3043ba21817c) - Darin Spivey, closes: [#53](https://github.com/logdna/tail-file-node/issues/53)
+
+
+### **BREAKING CHANGES**
+
+* **deps:** Node.js 18 and 20 are no longer supported.
+
 ## [4.0.2](https://github.com/logdna/tail-file-node/compare/v4.0.1...v4.0.2) (2024-04-11)
 
 
