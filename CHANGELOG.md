@@ -1,5 +1,12 @@
 ## Changelog
 
+## [5.0.1](https://github.com/logdna/tail-file-node/compare/v5.0.0...v5.0.1) (2026-11-18)
+
+
+### Bug Fixes
+
+* Bound rotation remainder reads [d5100d7](https://github.com/logdna/tail-file-node/commit/d5100d7f38ee83a17a03b2d6bb5b6e11cc97ba3f) - Darin Spivey, closes: [#52](https://github.com/logdna/tail-file-node/issues/52)
+
 # [5.0.0](https://github.com/logdna/tail-file-node/compare/v4.0.2...v5.0.0) (2026-11-17)
 
 
