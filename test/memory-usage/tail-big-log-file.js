@@ -11,7 +11,9 @@ const TailFile = require('../../index.js')
 const ALL_DONE_AFTER_TIME = 5000 // Close tail after 5 seconds of inactivity
 const shellCmd = path.join(__dirname, 'populate-big-log.sh')
 
-test('Memory consumption', async (t) => {
+test('Memory consumption', {
+  skip: process.platform === 'win32' && 'Requires a POSIX executable shell script'
+}, async (t) => {
   const LOG_FILE_NAME = 'big-log-file.log'
   const testDir = os.tmpdir()
   const LOG_FILE_PATH = path.join(testDir, LOG_FILE_NAME)

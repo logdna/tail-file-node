@@ -21,15 +21,17 @@ test('Exports structure', async (t) => {
   , 'start'
   , '_openFile'
   , '_readRemainderFromFileHandle'
+  , '_pushChunk'
   , '_readChunks'
   , '_pollFileForChanges'
+  , '_pollFile'
   , '_scheduleTimer'
   , '_streamFileChanges'
   , '_read'
   , 'quit'
   ], 'Methods names as expected')
 
-  t.equal(methods.length, 10, 'TailFile.prototype prop count')
+  t.equal(methods.length, 12, 'TailFile.prototype prop count')
 })
 
 test('TailFile instantiation', async (t) => {
