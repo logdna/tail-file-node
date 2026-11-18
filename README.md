@@ -344,7 +344,10 @@ This allows backpressure to be supported throughout the process.
 `TailFile` keeps a [`FileHandle`][] open for the `filename`, which is attached to an
 inode.  If log rolling happens, `TailFile` uses the `FileHandle` to read the rest of the
 "old" file before starting the process from the beginning of the newly-created file.
-This ensures that no data is lost due to the rolling/renaming of `filename`.
+The remainder is read with backpressure in chunks bounded by the outer
+`highWaterMark`, with a 64 KiB fallback when it is zero. Only a single rotation
+between polls is covered; intermediate archives are not replayed, so multiple
+rotations between polls can lose data even when the archives are retained.
 This functionality assumes that `filename` is re-created with the same name,
 otherwise an error is emitted if `filename` does not re-appear.
 
@@ -364,9 +367,6 @@ If polling is off during backpressure, `TailFile` can handle
 [a single log roll or rename](#how-log-rolling-is-handled) during backpressure, but if
 the log is renamed more than once, there will most likely be data loss, as polling for
 changes will be off.
-
-This is an *extrememly unlikely* edge case, however we recommend consuming the `TailFile`
-stream almost immediately upon creation.
 
 ## Contributing
 

@@ -98,8 +98,8 @@ test('Data not flowing pauses polling, but still tolerates 1 log roll', (t) => {
 
   t.test('Check to see that backpressure is on and polling is stopped', async (tt) => {
     const symbols = getSymbols(tail)
-    tt.ok(tail[symbols.stream], 'Backpressure is on because "stream" has been stored')
-    tt.same(this[symbols.pollTimer], null, 'Poll timer has been set to null')
+    tt.ok(tail[symbols.stream] || tail[symbols.demand], 'Reading is backpressured')
+    tt.equal(tail[symbols.pollTimer], null, 'Poll timer has been set to null')
   })
 
   t.test('Start data "flowing" by adding a listener and consuming', (tt) => {
