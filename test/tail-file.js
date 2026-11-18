@@ -19,6 +19,8 @@ test('Exports structure', async (t) => {
   t.same(methods, [
     'constructor'
   , 'start'
+  , 'unwatch'
+  , 'rewatch'
   , '_openFile'
   , '_readRemainderFromFileHandle'
   , '_readChunks'
@@ -29,7 +31,7 @@ test('Exports structure', async (t) => {
   , 'quit'
   ], 'Methods names as expected')
 
-  t.equal(methods.length, 10, 'TailFile.prototype prop count')
+  t.equal(methods.length, 12, 'TailFile.prototype prop count')
 })
 
 test('TailFile instantiation', async (t) => {
@@ -752,4 +754,75 @@ test('Invalid options checks', async (t) => {
   , code: 'ESTARTPOS'
   , meta: {got: 1.23456}
   }, 'startPos must be > 0')
+})
+
+test('Test unwatching and rewatching a file', async (t) => {
+  const name = 'logfile.txt'
+  const testDir = t.testdir({
+    [name]: ''
+  })
+  const filename = path.join(testDir, name)
+  const tail = new TailFile(filename, {
+    encoding: 'utf8'
+  , pollFileIntervalMs: 100
+  })
+
+  t.teardown(() => {
+    tail.quit().catch(fail)
+  })
+
+  const testString = 'Here is a line\n'
+
+  await tail.start()
+  await fs.promises.appendFile(filename, testString)
+
+  tail.unwatch()
+
+  // call again to satisfy tests
+  tail.unwatch()
+
+  let data_received = false
+
+  const ac = new AbortController()
+
+  once(tail, 'data', {signal: ac.signal}).then(() => {
+    data_received = true
+  }, () => {})
+
+  await fs.promises.appendFile(filename, testString)
+  await fs.promises.appendFile(filename, testString)
+
+  await sleep(300)
+
+  ac.abort()
+
+  t.equal(data_received, false, 'Did not receive data when not watching')
+
+  // do NOT await rewatch, or 'flush' event will already have been sent
+  tail.rewatch()
+
+  // should do nothing
+  tail.rewatch()
+
+  const [flush] = await once(tail, 'flush')
+
+  await fs.promises.appendFile(filename, testString)
+  const [line] = await once(tail, 'data')
+  const [flush2] = await once(tail, 'flush')
+
+  t.equal(flush.firstPoll, true, 'After rewatch, flush event with firstPoll true')
+  t.equal(flush2.firstPoll, false, 'New data polled, where firstPoll should be false')
+  t.equal(line, testString, 'New line was received')
+
+  t.equal(
+    flush.lastReadPosition
+  , testString.length * 3
+  , 'Did emit three lines, lastReadPosition equals length of those lines.'
+  )
+
+  t.equal(
+    flush2.lastReadPosition
+  , testString.length * 4
+  , 'lastReadPosition correctly relects last added test line.'
+  )
 })
