@@ -1,5 +1,12 @@
 ## Changelog
 
+## [5.0.2](https://github.com/logdna/tail-file-node/compare/v5.0.1...v5.0.2) (2026-11-19)
+
+
+### Bug Fixes
+
+* prevent shutdown races and clean up cancelled tails [54847d5](https://github.com/logdna/tail-file-node/commit/54847d5989063cadea7b774fa705a321eb472728) - Darin Spivey, closes: [#55](https://github.com/logdna/tail-file-node/issues/55) [#52](https://github.com/logdna/tail-file-node/issues/52)
+
 ## [5.0.1](https://github.com/logdna/tail-file-node/compare/v5.0.0...v5.0.1) (2026-11-18)
 
 
