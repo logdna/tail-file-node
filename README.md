@@ -29,6 +29,7 @@ in Node.js could also benefit from using this.
   * [Constructor: new TailLog(filename[, options])](#constructor-new-tailfilefilename-options)
   * [tail.start()](#tailstart)
   * [tail.quit()](#tailquit)
+  * [tail.destroy()](#taildestroy)
 * **[Program Flow](#program-flow)**
 * **[How Log Rolling is Handled](#how-log-rolling-is-handled)**
 * **[Backpressure Pauses Polling](#backpressure-pauses-polling)**
@@ -158,11 +159,9 @@ startTail().catch((err) => {
 
 ### Example for Clean Shutdown
 
-`TailFile` will call `flush()` when `quit()` is called.  Therefore, to exit  cleanly,
-one must simply await the `quit` call.  If the implementation wishes to keep track of
-the last position read from the file (for resuming in the same spot later, for example),
-then a simple listener can be added to always track the file position.  That way, when
-`quit()` is called, it will get properly updated.
+To exit cleanly, keep consuming data while awaiting `quit()`. Add a listener to
+track the last position read from the file, for example to resume in the same
+spot later. The final read updates that position before `quit()` settles.
 
 ```js
 const TailFile = require('@logdna/tail-file')
@@ -312,20 +311,49 @@ Useful settings such as `encoding: 'utf8'` can be used this way.
 ### `tail.start()`
 
 * Returns: [`<Promise>`][] - Resolves after the file is polled successfully
-* Rejects: If `filename` is not found
+* Rejects: If opening `filename` fails, or startup is cancelled
 
 Calling `start()` begins the polling of `filename` to watch for added/changed bytes.
 `start()` may be called before or after data is set up to be consumed with a
 `data` listener or a `pipe`.  Standard node stream rules apply, which say
 that data will not flow through the stream [until it's consumed][reading modes].
+An initial read paused by backpressure does not prevent `start()` from resolving,
+so it is safe to await startup before attaching a consumer. Concurrent calls share
+the same startup operation. Opening can be retried after an initial open failure.
 
 ### `tail.quit()`
 
-* Returns: [`<Promise>`][] - Resolves after `flush` is called and streams are closed.
+* Returns: [`<Promise>`][] - Resolves after the active read and a final file check
+  finish and owned file resources are released.
+* Rejects: If graceful draining fails, or `destroy()` interrupts shutdown.
 * Emits: [`close`](#event-any-readable-event) when the parent `Readstream` is ended.
 
-This function calls `flush`, then closes all streams and exits cleanly.  The parent `TailFile` stream will be
-properly ended by pushing `null`, therefore an `end` event may be emitted as well.
+Keep consuming until `quit()` settles: graceful shutdown waits for backpressured
+reads and has no fixed completion deadline if the consumer stays paused. An
+earlier `flush` notification cannot complete this final read. Repeated calls share
+the same shutdown operation.
+
+If the final check finds that `filename` is missing, `quit()` drains the accessible
+open file and finishes without waiting for recreation. A missing pathname alone
+does not reject shutdown; an I/O failure while draining still does.
+
+The stream ends after graceful draining. The existing `quit(error)` path skips
+draining and retains the `error` then `end` notifications when the error is handled.
+Errors during graceful draining retain their relevant error notification and
+reject the promise with the actual failure.
+
+### `tail.destroy()`
+
+Inherited from [`Readable`][], this method synchronously returns the tail and
+cancels reading. Cancellation can discard unread data. It stops polling and
+releases owned sources and file handles after pending I/O settles; when enabled,
+`close` follows that cleanup.
+
+An outstanding `quit()` rejects with the supplied error, or an `AbortError` with
+code `ABORT_ERR` for plain `destroy()`. Cancellation does not emit a successful
+`flush` or promise graceful completion. Cancelling startup uses the same error
+policy. Descriptors supplied through `readStreamOpts.fd` with `autoClose: false`
+remain the caller's responsibility and are not closed by the tail.
 
 ## Program Flow
 

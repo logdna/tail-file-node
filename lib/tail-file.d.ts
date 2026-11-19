@@ -130,18 +130,25 @@ declare class TailFile extends Readable {
    * that data will not flow through the stream until it's consumed.
    *
    * @returns A Promise that resolves after the file is polled successfully,
-   *   rejects if `filename` is not found.
+   *   rejects if opening fails or startup is cancelled. Readiness does not wait
+   *   for an initial backpressured read to finish consuming.
    */
   start(): Promise<void>
 
   /**
-   * Closes all streams and exits cleanly. The parent `TailFile` stream will
-   * be properly ended by pushing null, therefore an end event may be emitted
-   * as well.
+   * Finishes the active read and a final file check, releases owned resources
+   * and ends the stream. Continue consumption while awaiting graceful shutdown.
+   * Repeated calls share shutdown work. An error argument skips draining and
+   * retains the handled error/end notifications.
+   *
+   * Rejects if draining fails or destroy() cancels shutdown. Cancellation uses
+   * the supplied error, or an AbortError with code ABORT_ERR for plain destroy().
+   * A missing final pathname alone does not fail shutdown after accessible data
+   * has been drained.
    *
    * @emits close when the parent `ReadStream` is ended.
    */
-  quit(): Promise<void>
+  quit(error?: Error): Promise<void>
 
   // Event emitter
 

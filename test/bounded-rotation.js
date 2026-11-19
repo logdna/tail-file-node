@@ -29,7 +29,7 @@ async function setup(t, opts) {
   const symbols = getSymbols(tail)
   await tail.start()
   clearTimeout(tail[symbols.pollTimer])
-  // Drain normal reads instead of depending on a new destroy() lifecycle.
+  // Continue consumption so teardown can drain gracefully.
   t.teardown(async () => {
     tail.resume()
     if (!tail.destroyed && !tail._readableState.ended) await tail.quit()
@@ -187,7 +187,7 @@ test('Destroy wakes a paused remainder and closes its handle', async (t) => {
   const closed = once(tail, 'close')
   tail.destroy()
   await closed
-  // Upstream destroy() is unchanged; the drain owns and closes its old handle.
+  // Destruction completes only after the drain closes its old handle.
   await polling
   t.equal(handle.fd, -1)
   t.equal(tail[symbols.demand], null)
