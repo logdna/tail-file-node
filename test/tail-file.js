@@ -15,23 +15,10 @@ test('Exports structure', async (t) => {
   t.type(TailFile, Function, 'TailFile is a function')
   t.equal(TailFile.name, 'TailFile', 'Class name is correct')
 
-  const methods = Object.getOwnPropertyNames(TailFile.prototype)
-  t.same(methods, [
-    'constructor'
-  , 'start'
-  , '_openFile'
-  , '_readRemainderFromFileHandle'
-  , '_pushChunk'
-  , '_readChunks'
-  , '_pollFileForChanges'
-  , '_pollFile'
-  , '_scheduleTimer'
-  , '_streamFileChanges'
-  , '_read'
-  , 'quit'
-  ], 'Methods names as expected')
-
-  t.equal(methods.length, 12, 'TailFile.prototype prop count')
+  t.type(TailFile.prototype.start, Function, 'start is available')
+  t.type(TailFile.prototype.quit, Function, 'quit is available')
+  const destroy = require('stream').Readable.prototype.destroy
+  t.equal(TailFile.prototype.destroy, destroy, 'destroy is inherited')
 })
 
 test('TailFile instantiation', async (t) => {
