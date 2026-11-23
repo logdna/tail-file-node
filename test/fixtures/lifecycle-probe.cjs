@@ -209,8 +209,12 @@ async function ordinaryOverlap() {
   const record = await makeTail()
   await ordinaryPause(record, Buffer.from('ABC'))
   const stats = await originalStat(filename)
+  const big_int_stats = await originalStat(filename, {bigint: true})
   // Remove filesystem scheduling luck from the final-poll interleaving.
-  statOverride = async () => { return stats }
+  statOverride = async (file, options) => {
+    if (options && options.bigint) return big_int_stats
+    return stats
+  }
   const quitting = settlement(record.tail.quit())
   await immediate()
   overlap = sources.length > 1

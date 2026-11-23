@@ -250,7 +250,7 @@ test('Success: File may disappear, but continues if the file re-appears', (t) =>
     await fs.promises.unlink(filename)
     // Certain OS's will use the same inode.  Force a different one to test the branch
     // that would call `_readRemainderFromFileHandle()` twice
-    tail[symbols.inode] = 123456
+    tail[symbols.inode] = global.BigInt('123456')
     await sleep(500)
   })
 
@@ -596,7 +596,7 @@ test('Handled: Error reading old FH emits tail_error after inode changes', async
   // Close the FH first to trigger an error after `ENOENT` is thrown.
   const tail_error = once(tail, 'tail_error')
   await tail[symbols.fileHandle].close()
-  tail[symbols.inode] = 12345678
+  tail[symbols.inode] = global.BigInt('12345678')
   await fs.promises.appendFile(filename, 'Here is a new line')
   await tail._pollFileForChanges()
   const [evt] = await tail_error
