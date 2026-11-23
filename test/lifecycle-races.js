@@ -336,20 +336,8 @@ for (const event of ['renamed', 'truncated']) {
     if (event === 'truncated') await fs.promises.writeFile(filename, 'old contents')
     await ready(tail)
     if (event === 'renamed') {
-      const initial = await fs.promises.stat(filename)
       await fs.promises.rename(filename, `${filename}.1`)
       await fs.promises.writeFile(filename, 'replacement')
-      const next = await fs.promises.stat(filename)
-      // Number-valued inode precision can alias distinct Windows files. Keep
-      // this listener-cancellation test independent of that separate limitation.
-      const stat = fs.promises.stat
-      t.teardown(() => { fs.promises.stat = stat })
-      fs.promises.stat = async (...args) => {
-        if (args[0] === filename) {
-          return {...next, ino: next.ino === initial.ino ? next.ino + 4096 : next.ino}
-        }
-        return stat(...args)
-      }
     } else {
       await fs.promises.writeFile(filename, 'x')
     }
@@ -453,22 +441,10 @@ test('A late ordinary read error after cancellation is suppressed', async (t) =>
 test('Cancellation during replacement-open handoff suppresses resumption', async (t) => {
   const {tail, filename, handles, sources} = fixture(t)
   await ready(tail)
-  const initial = await fs.promises.stat(filename)
   await fs.promises.rename(filename, `${filename}.1`)
   await fs.promises.writeFile(filename, 'replacement')
-  const next = await fs.promises.stat(filename)
-  const stat = fs.promises.stat
   const open = fs.promises.open
-  t.teardown(() => {
-    fs.promises.stat = stat
-    fs.promises.open = open
-  })
-  fs.promises.stat = async (...args) => {
-    if (args[0] === filename && next.ino === initial.ino) {
-      return {...next, ino: next.ino + 4096}
-    }
-    return stat(...args)
-  }
+  t.teardown(() => { fs.promises.open = open })
   let returned = false
   fs.promises.open = async (...args) => {
     const handle = await open(...args)
