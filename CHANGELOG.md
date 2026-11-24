@@ -1,5 +1,12 @@
 ## Changelog
 
+## [5.0.3](https://github.com/logdna/tail-file-node/compare/v5.0.2...v5.0.3) (2026-11-24)
+
+
+### Bug Fixes
+
+* compare exact inode values when detecting rotation [3ba83aa](https://github.com/logdna/tail-file-node/commit/3ba83aa21b4add6db65306591ca63ad823f45214) - Darin Spivey, closes: [#57](https://github.com/logdna/tail-file-node/issues/57)
+
 ## [5.0.2](https://github.com/logdna/tail-file-node/compare/v5.0.1...v5.0.2) (2026-11-19)
 
 
