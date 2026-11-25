@@ -47,7 +47,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/logdna/tail-file-node"
+    "url": "git+https://github.com/logdna/tail-file-node.git"
   },
   "homepage": "https://github.com/logdna/tail-file-node",
   "author": {
